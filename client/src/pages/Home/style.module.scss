@@ -1,2 +1,24 @@
 @import '@styles/base';
 
+@include mainContainer {
+  .dataContainer {
+    @include directionX;
+
+    flex-grow: 1;
+
+    .dataGrid {
+      width: 100%;
+
+      .innerDataGrid {
+        @include grid(3, 0.6rem);
+        width: 100%;
+      }
+    }
+    .empty {
+      @include containerCenter;
+
+      width: 100%;
+      flex-grow: 1;
+    }
+  }
+}

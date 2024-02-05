@@ -40,3 +40,20 @@
   margin-top: $value;
   margin-bottom: $value;
 }
+
+@mixin mainContainer {
+  .mainContainer {
+    @include padding(1rem);
+    @include directionY;
+
+    flex-grow: 1;
+
+    @content;
+  }
+}
+
+@mixin grid($col, $gap) {
+  display: grid;
+  grid-template-columns: repeat($col, minmax(0, 1fr));
+  gap: $gap;
+}
