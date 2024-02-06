@@ -41,7 +41,7 @@ const loginAuthentication = async (dataObject) => {
             where: { email }
         });
 
-        if(_.isEmpty(data)) throw Boom.notFound('Account not found from this email!');
+        if(_.isEmpty(data)) throw Boom.unauthorized('Account not found from this email!');
 
         const hashedPassword = data?.dataValues?.password;
         const isValid = __compareHashPassword(password, hashedPassword);

@@ -11,6 +11,11 @@ import classes from '../style.module.scss';
 import { numberWithPeriods } from '@utils/allUtils';
 
 const AddCouponsComponent = ({ }) => {
+    const dispatch = useDispatch();
+    const [coupons, setCoupons] = useState([]);
+
+    
+
     return (
         <div className={classes.componentContainer}>
             <h2 className={classes.title}><FormattedMessage id='payment_step_2_name' /></h2>

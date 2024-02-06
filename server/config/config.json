@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "aaa123",
+    "password": "aaa12345",
     "database": "travel_ticket",
     "host": "127.0.0.1",
     "dialect": "mysql"

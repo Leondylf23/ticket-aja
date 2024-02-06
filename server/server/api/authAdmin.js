@@ -27,8 +27,8 @@ const login = async (request, reply) => {
     try {
         const formData = request.body;
         const decryptedData = {
-            email: formData?.email && decryptData(formData?.email),
-            password: formData?.password && decryptData(formData?.password),
+            ...(formData?.email && {email: decryptData(formData?.email)}),
+            ...(formData?.password && {password: decryptData(formData?.password)}),
         }
 
         ValidationAuthAdmin.loginFormValidation(decryptedData);
@@ -49,11 +49,10 @@ const register = async (request, reply) => {
     try {
         const formData = request.body;
         const decryptedData = {
-            email: formData?.email && decryptData(formData?.email),
-            password: formData?.password && decryptData(formData?.password),
-            fullname: formData?.fullname && decryptData(formData?.fullname),
-            role: formData?.role && decryptData(formData?.role),
-            dob: formData?.dob && decryptData(formData?.dob),
+            ...(formData?.email && {email: decryptData(formData?.email)}),
+            ...(formData?.password && {password: decryptData(formData?.password)}),
+            ...(formData?.fullname && {fullname: decryptData(formData?.fullname)}),
+            ...(formData?.dob && {dob: decryptData(formData?.dob)}),
         }
 
         ValidationAuthAdmin.registerFormValidation(decryptedData);

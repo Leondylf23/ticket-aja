@@ -3,6 +3,7 @@ import { createStructuredSelector } from 'reselect';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import ProductDetail from './components/ProductDetail';
 import AddCoupons from './components/AddCoupons';
@@ -10,8 +11,11 @@ import PaymentSelection from './components/PaymentSelection';
 import PaymentSumary from './components/PaymentSumary';
 
 import classes from './style.module.scss';
+import { selectUserInputData } from './selectors';
+import { showPopup } from '@containers/App/actions';
+import { setUserInputs } from './actions';
 
-const PaymentPage = ({ }) => {
+const PaymentPage = ({ inputtedData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
@@ -41,8 +45,18 @@ const PaymentPage = ({ }) => {
 
     const [stepPage, setStepPage] = useState(null);
     const [step, setStep] = useState(-1);
+    const [userInputProgress, setUserInputProgress] = useState(null);
 
     const setStepPageTab = (data) => {
+        if(data?.id > 1 && !(userInputProgress && userInputProgress?.variant)) {
+            dispatch(showPopup('Payment', 'No entry to step 2'));
+            return;
+        }
+        if(data?.id > 3 && !(userInputProgress && userInputProgress?.variant)) {
+            dispatch(showPopup('Payment', 'No entry to step 2'));
+            return;
+        }
+        
         setStep(data?.id);
         setStepPage(data?.page);
     };
@@ -54,6 +68,15 @@ const PaymentPage = ({ }) => {
     useEffect(() => {
         setStepPageTab(stepPages[0]);
     }, []);
+    useEffect(() => {
+        if(inputtedData) {
+            if(inputtedData?.id !== id) {
+                dispatch(setUserInputs({id}));
+                return;
+            }
+            setUserInputProgress(inputtedData);
+        }
+    }, [inputtedData]);
 
     return (
         <div className={classes.mainContainer}>
@@ -81,11 +104,11 @@ const PaymentPage = ({ }) => {
 };
 
 PaymentPage.propTypes = {
-
+    inputtedData: PropTypes.object
 }
 
 const mapStateToProps = createStructuredSelector({
-
+    inputtedData: selectUserInputData
 });
 
 export default connect(mapStateToProps)(PaymentPage);
