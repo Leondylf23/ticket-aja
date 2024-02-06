@@ -4,7 +4,10 @@ import MainLayout from '@layouts/MainLayout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import NotFound from '@pages/NotFound';
+import Orders from '@pages/Orders';
+import PaymentPage from '@pages/PaymentPage';
 import Register from '@pages/Register';
+import TicketDetail from '@pages/TicketDetail';
 
 const routes = [
   {
@@ -27,6 +30,27 @@ const routes = [
     protected: false,
     component: Register,
     layout: BlankLayout,
+  },
+  {
+    path: '/ticket/:id',
+    name: 'Ticket Detail',
+    protected: false,
+    component: TicketDetail,
+    layout: MainLayout,
+  },
+  {
+    path: '/ticket/:id/pay',
+    name: 'Ticket Payment',
+    protected: true,
+    component: PaymentPage,
+    layout: MainLayout,
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    protected: true,
+    component: Orders,
+    layout: MainLayout,
   },
   { path: '*', name: 'Not Found', component: NotFound, layout: MainLayout, protected: false },
 ];

@@ -1,6 +1,6 @@
 export default {
   app_greeting: 'Hi from Web!',
-  app_title_header: 'TravelDulu',
+  app_title_header: 'Ticket Aja',
   app_not_found: 'Page not found',
   app_lang_id: 'Indonesian',
   app_lang_en: 'English',
@@ -40,5 +40,24 @@ export default {
   register_dob_validation: 'Date of Birth is required!',
   register_dob_age_validation: 'You must be at least 15+ years old to register!',
   register_password_validation: 'Password must be at least 6 characters long and lower equal than 20 characters!',
-  register_email_has_taken: 'This email has already been taken!'
+  register_email_has_taken: 'This email has already been taken!',
+
+  ticket_card_price: 'person',
+
+  home_title: 'Browse Tickets',
+  home_search_placeholder: 'Search for tickets...',
+
+  ticket_detail_buy_btn: 'Buy Now',
+  ticket_detail_desc: 'Description',
+
+  payment_previous_btn: 'Previous',
+  payment_next_btn: 'Next',
+  payment_finish_btn: 'Finish',
+  payment_step_1_name: 'Product Detail',
+  payment_step_2_name: 'Add Coupon',
+  payment_step_3_name: 'Payment',
+  payment_step_4_name: 'Summary',
+  
+
+  empty_data: 'Empty'
 };

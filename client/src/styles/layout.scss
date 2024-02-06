@@ -1,3 +1,5 @@
+@import './media-mixins.scss';
+
 @mixin directionY {
   display: flex;
   flex-direction: column;
@@ -47,6 +49,13 @@
     @include directionY;
 
     flex-grow: 1;
+    width: 100%;
+
+    @include apply-at-md-size {
+      @include padding(2rem);
+
+      max-width: $screen-xl-limit;
+    }
 
     @content;
   }

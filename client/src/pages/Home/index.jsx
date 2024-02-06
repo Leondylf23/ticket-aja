@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { useDispatch, connect } from 'react-redux';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { createStructuredSelector } from 'reselect';
+import PropTypes from 'prop-types';
 
 import clasess from './style.module.scss';
 import TicketCard from '@components/TicketCard';
 
-const Home = () => {
+const Home = ({ tickets }) => {
   const dispatch = useDispatch();
+  const intl = useIntl();
 
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
 
@@ -18,55 +22,43 @@ const Home = () => {
       {
         id: 1,
         name: 'aaa',
-        location: 'Bangkok',
+        location: 'Jakarta Barat',
+        organizer: 'Google Inc',
+        price: 5000000,
+        more: 'front, center, back'
       },
-      {
-        id: 2,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
-      {
-        id: 3,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
-      {
-        id: 4,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
-      {
-        id: 5,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
-      {
-        id: 6,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
-      {
-        id: 7,
-        name: 'aaa',
-        location: 'Bangkok',
-      },
+
     ]);
   }, []);
 
   return (
     <div className={clasess.mainContainer}>
-      <h1>Browse Tickets</h1>
+      <h1 className={clasess.title}><FormattedMessage id='home_title' /></h1>
+      <div className={clasess.searchContainer}>
+        <h4 className={clasess.title}><FormattedMessage id='home_title' /></h4>
+        <input type="text" className={clasess.input} placeholder={intl.formatMessage({ id: 'home_search_placeholder' })} />
+      </div>
       <div className={clasess.dataContainer}>
         {data.length > 0 ? <div className={clasess.dataGrid}>
           <div className={clasess.innerDataGrid}>
-            {data.map(ticket => <TicketCard data={ticket} key={ticket?.id} />)}
+            {data.map(ticket =>
+              <TicketCard data={ticket} key={ticket?.id} />
+            )}
           </div>
         </div> : <div className={clasess.empty}>
-          <h3>Kosong</h3>
+          <h3><FormattedMessage id='empty_data' /></h3>
         </div>}
       </div>
     </div>
   );
 };
 
-export default Home;
+Home.propTypes = {
+  tickets: PropTypes.array
+}
+
+const mapStateToProps = createStructuredSelector({
+  
+});
+
+export default connect(mapStateToProps)(Home);

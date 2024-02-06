@@ -8,7 +8,7 @@ import { selectLocale, selectTheme } from '@containers/App/selectors';
 import Navbar from '@components/Navbar';
 
 const MainLayout = ({ children, locale, theme, intl: { formatMessage } }) => (
-  <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
+  <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
     <Navbar title={formatMessage({ id: 'app_title_header' })} locale={locale} theme={theme} />
     {children}
   </div>

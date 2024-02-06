@@ -5,6 +5,10 @@
   height: 40px;
   border: 1px solid var(--color-border);
   border-radius: 5px;
+
+  &:disabled {
+    background-color: rgba($color: #a0a0a0, $alpha: 1);
+  }
 }
 
 @mixin button {
@@ -25,4 +29,8 @@
   &:disabled {
     background-color: var(--color-button-disabled);
   }
+}
+
+@mixin shadow {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
 }
