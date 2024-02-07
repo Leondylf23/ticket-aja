@@ -21,7 +21,6 @@ const temporaryReducers = {
   ticketDetail: ticketDetailReducer,
   bookings: bookingsReducer,
   ticketCreation: ticketCreationReducer,
-
 };
 
 const createReducer = () => {

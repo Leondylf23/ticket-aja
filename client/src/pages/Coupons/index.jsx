@@ -11,8 +11,14 @@ const Coupons = ({ couponDatas }) => {
     return (
         <div className={classes.mainContainer}>
             <h1 className={classes.title}>a</h1>
-            <div className=''>
-
+            <div className={classes.dataContainer}>
+                <div className={classes.data}>
+                    <p className={classes.name}></p>
+                    <p className={classes.price}></p>
+                    <button className={classes.delBtn} data-type='red'>
+                        X
+                    </button>
+                </div>
             </div>
         </div>
     );
