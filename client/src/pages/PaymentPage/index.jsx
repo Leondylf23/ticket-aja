@@ -11,11 +11,12 @@ import PaymentSelection from './components/PaymentSelection';
 import PaymentSumary from './components/PaymentSumary';
 
 import classes from './style.module.scss';
-import { selectUserInputData } from './selectors';
+import { selectProductId, selectUserInputData } from './selectors';
 import { showPopup } from '@containers/App/actions';
-import { setUserInputs } from './actions';
+import { setProductId, setUserInputs } from './actions';
+import { selectTicketDetail } from '@pages/TicketDetail/selectors';
 
-const PaymentPage = ({ inputtedData }) => {
+const PaymentPage = ({ inputtedData, productId, productDetail }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
@@ -48,35 +49,39 @@ const PaymentPage = ({ inputtedData }) => {
     const [userInputProgress, setUserInputProgress] = useState(null);
 
     const setStepPageTab = (data) => {
-        if(data?.id > 1 && !(userInputProgress && userInputProgress?.variant)) {
-            dispatch(showPopup('Payment', 'No entry to step 2'));
+        if (data?.id > 1 && !(userInputProgress && userInputProgress?.variant)) {
+            dispatch(showPopup(intl.formatMessage({ id: 'payment_title' }), intl.formatMessage({ id: 'payment_step_1_not_complete' })));
             return;
         }
-        if(data?.id > 3 && !(userInputProgress && userInputProgress?.variant)) {
-            dispatch(showPopup('Payment', 'No entry to step 2'));
+        if (data?.id > 3 && !(userInputProgress && userInputProgress?.paymentMethod)) {
+            dispatch(showPopup(intl.formatMessage({ id: 'payment_title' }), intl.formatMessage({ id: 'payment_step_3_not_complete' })));
             return;
         }
-        
+
         setStep(data?.id);
         setStepPage(data?.page);
     };
 
     const finish = () => {
-        navigate('/orders');
+        navigate('/bookings');
     };
 
     useEffect(() => {
         setStepPageTab(stepPages[0]);
     }, []);
     useEffect(() => {
-        if(inputtedData) {
-            if(inputtedData?.id !== id) {
-                dispatch(setUserInputs({id}));
+        if (!productDetail) {
+            navigate(`/ticket/${id}`);
+        }
+        if (inputtedData) {
+            if (productId !== id) {
+                dispatch(setUserInputs(null));
+                dispatch(setProductId(id));
                 return;
             }
             setUserInputProgress(inputtedData);
         }
-    }, [inputtedData]);
+    }, [inputtedData, productId, productDetail]);
 
     return (
         <div className={classes.mainContainer}>
@@ -104,11 +109,15 @@ const PaymentPage = ({ inputtedData }) => {
 };
 
 PaymentPage.propTypes = {
-    inputtedData: PropTypes.object
+    inputtedData: PropTypes.object,
+    productId: PropTypes.string,
+    productDetail: PropTypes.object
 }
 
 const mapStateToProps = createStructuredSelector({
-    inputtedData: selectUserInputData
+    inputtedData: selectUserInputData,
+    productId: selectProductId,
+    productDetail: selectTicketDetail
 });
 
 export default connect(mapStateToProps)(PaymentPage);

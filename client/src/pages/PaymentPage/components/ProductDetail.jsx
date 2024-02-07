@@ -13,35 +13,37 @@ import { selectUserInputData } from '../selectors';
 
 import classes from '../style.module.scss';
 
-const ProductDetailComponent = ({ ticketData, userInput }) => {
+const ProductDetailComponent = ({ ticketData, inputtedData }) => {
     const dispatch = useDispatch();
 
     const [selectedVariant, setSelectedVariant] = useState(null);
 
     const setVariantData = (data) => {
         setSelectedVariant(data);
-        dispatch(setUserInputs({...userInput, variant: data}));
     };
 
     useEffect(() => {
-        if(userInput?.variant) {
-            setSelectedVariant(userInput?.variant);
+        if (inputtedData?.variant) {
+            setSelectedVariant(inputtedData?.variant);
         }
-    }, [userInput]);
+    }, []);
+    useEffect(() => {
+        dispatch(setUserInputs({ ...inputtedData, variant: selectedVariant, totalPayment: selectedVariant?.price }));
+    }, [selectedVariant])
 
     return (
         <div className={classes.componentContainer}>
             <h2 className={classes.title}>{ticketData?.title}</h2>
-            <h4 className={classes.pageTitle}><FormattedMessage id='payment_prct_detail_page_title'/></h4>
+            <h4 className={classes.pageTitle}><FormattedMessage id='payment_prct_detail_page_title' /></h4>
             <div className={classes.variantContainer}>
-                {ticketData?.variants?.map(variant => 
-                <div className={classes.variant} key={variant?.variantName} onClick={() => setVariantData(variant)} data-active={variant === selectedVariant}>
-                    <a>{variant?.variantName}</a>
-                </div>
+                {ticketData?.variants?.map(variant =>
+                    <div className={classes.variant} key={variant?.variantName} onClick={() => setVariantData(variant)} data-active={variant === selectedVariant}>
+                        <a>{variant?.variantName}</a>
+                    </div>
                 )}
             </div>
             <div className={classes.footer}>
-                <h4 className={classes.footerTitle}><FormattedMessage id='payment_total'/></h4>
+                <h4 className={classes.footerTitle}><FormattedMessage id='payment_total' /></h4>
                 <div className={classes.priceContainer}>
                     <LocalOfferIcon className={classes.icon} />
                     <p className={classes.priceValue}>Rp. {numberWithPeriods(selectedVariant ? selectedVariant?.price : 0)}</p>
@@ -53,12 +55,12 @@ const ProductDetailComponent = ({ ticketData, userInput }) => {
 
 ProductDetailComponent.propTypes = {
     ticketData: PropTypes.object,
-    userInput: PropTypes.object
+    inputtedData: PropTypes.object
 }
 
 const mapStateToProps = createStructuredSelector({
     ticketData: selectTicketDetail,
-    userInput: selectUserInputData
+    inputtedData: selectUserInputData
 });
 
 export default connect(mapStateToProps)(ProductDetailComponent);

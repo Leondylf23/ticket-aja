@@ -33,7 +33,7 @@ export const initialState = {
 
 export const storedKey = [];
 
-const ticketDetailReducer = (state = initialState, action) =>
+const ticketCreationReducer = (state = initialState, action) =>
     produce(state, (draft) => {
         switch (action.type) {
             case SET_PRODUCT_DATA:
@@ -42,4 +42,4 @@ const ticketDetailReducer = (state = initialState, action) =>
         }
     });
 
-export default ticketDetailReducer;
+export default ticketCreationReducer;

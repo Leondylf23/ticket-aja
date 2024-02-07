@@ -3,8 +3,8 @@ const Boom = require('boom');
 
 const loginFormValidation = (data) => {
     const schema = Joi.object({
-        email: Joi.string().email({ minDomainSegments: 2 }).required().description('Valid email address'),
-        password: Joi.string().min(6).max(20).required().description("Password must be at least 6 characters and not more than 20 characters")
+        email: Joi.string().required().description('Valid email address'),
+        password: Joi.string().required().description("Must fill password")
     });
 
     if (schema.validate(data).error) {

@@ -1,5 +1,7 @@
 @import '@styles/base.scss';
 
 @include mainContainer {
-    
+  .title {
+    margin-bottom: 0.6rem;
+  }
 }

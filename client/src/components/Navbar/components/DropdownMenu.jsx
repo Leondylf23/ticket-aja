@@ -9,9 +9,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 import { useDispatch } from "react-redux";
+import BallotIcon from '@mui/icons-material/Ballot';
+
+import { setLogin, setToken, setUserData } from "@containers/Client/actions";
 
 import classes from "./style.module.scss";
-import { setLogin, setToken, setUserData } from "@containers/Client/actions";
 
 function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
 
@@ -24,11 +26,7 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
                 onClose();
                 break;
             case 1:
-                navigate("/newjourney");
-                onClose();
-                break;
-            case 2:
-                navigate("/bookmark");
+                navigate("/bookings");
                 onClose();
                 break;
             case 3:
@@ -54,6 +52,10 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
             <MenuItem onClick={() => menuItemAction(0)}>
                 <Person2OutlinedIcon className={classes.iconProfile} />
                 <Typography variant="body2"><FormattedMessage id="nav_profile" /></Typography>
+            </MenuItem>
+            <MenuItem onClick={() => menuItemAction(1)}>
+                <BallotIcon className={classes.iconBookings} />
+                <Typography variant="body2"><FormattedMessage id="nav_bookings" /></Typography>
             </MenuItem>
             <div className={classes.divider}></div>
             <MenuItem onClick={() => menuItemAction(3)}>

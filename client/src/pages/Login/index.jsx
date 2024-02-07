@@ -23,8 +23,10 @@ const Login = ({ isLogin }) => {
         e.preventDefault();
 
         if (email === '' || password === '') {
-            dispatch(showPopup(intl.formatMessage({ id: 'login_title' }), intl.formatMessage({ id: 'login_validation' })))
-        }
+            dispatch(showPopup(intl.formatMessage({ id: 'login_title' }), intl.formatMessage({ id: 'login_validation' })));
+            return;
+            
+        } 
 
         const formData = {
             email: encryptDataAES(email),

@@ -9,9 +9,9 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import { useEffect, useState } from 'react';
 
 import { numberWithPeriods } from '@utils/allUtils';
+import { selectTicketDetail } from './selectors';
 
 import classes from './style.module.scss';
-import { selectTicketDetail } from './selectors';
 
 const TicketDetail = ({ ticketDetail }) => {
     const intl = useIntl();

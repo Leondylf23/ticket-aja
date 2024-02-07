@@ -4,10 +4,12 @@ import MainLayout from '@layouts/MainLayout';
 import Home from '@pages/Home';
 import Login from '@pages/Login';
 import NotFound from '@pages/NotFound';
-import Orders from '@pages/Orders';
 import PaymentPage from '@pages/PaymentPage';
 import Register from '@pages/Register';
 import TicketDetail from '@pages/TicketDetail';
+import Bookings from '@pages/Bookings';
+import TicketCreation from '@pages/TicketCreation';
+import Coupons from '@pages/Coupons';
 
 const routes = [
   {
@@ -46,10 +48,31 @@ const routes = [
     layout: MainLayout,
   },
   {
-    path: '/orders',
-    name: 'Orders',
+    path: '/bookings',
+    name: 'Bookings',
     protected: true,
-    component: Orders,
+    component: Bookings,
+    layout: MainLayout,
+  },
+  {
+    path: '/ticketcreation',
+    name: 'Ticket Creation',
+    protected: true,
+    component: TicketCreation,
+    layout: MainLayout,
+  },
+  {
+    path: '/ticketcreation/:id',
+    name: 'Ticket Creation Edit',
+    protected: true,
+    component: TicketCreation,
+    layout: MainLayout,
+  },
+  {
+    path: '/coupons',
+    name: 'Coupons',
+    protected: true,
+    component: Coupons,
     layout: MainLayout,
   },
   { path: '*', name: 'Not Found', component: NotFound, layout: MainLayout, protected: false },

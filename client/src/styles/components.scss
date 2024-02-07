@@ -9,6 +9,10 @@
   &:disabled {
     background-color: rgba($color: #a0a0a0, $alpha: 1);
   }
+  &[data-type='area'] {
+    height: 100px;
+    resize: none;
+  }
 }
 
 @mixin button {
@@ -21,16 +25,48 @@
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-
   background-color: var(--color-button);
+
   &:hover {
     background-color: var(--color-button-hover);
   }
   &:disabled {
     background-color: var(--color-button-disabled);
   }
+  &[data-type='red'] {
+    background-color: #c51e1e;
+    color: #fff;
+
+    &:hover {
+      background-color: #af1818;
+    }
+    &:disabled {
+      background-color: #961111;
+    }
+  }
 }
 
 @mixin shadow {
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@mixin statusContainer {
+  @include directionX;
+      @include paddingY(0.2rem);
+
+      justify-content: center;
+      border-radius: 10px;
+      width: 100%;
+      background-color: #414141;
+      color: #dfdfdf;
+
+      &[data-item='red'] {
+        background-color: #c51e1e;
+      }
+      &[data-item='yellow'] {
+        background-color: #9b800b;
+      }
+      &[data-item='green'] {
+        background-color: #35a713;
+      }
 }

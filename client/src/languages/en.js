@@ -11,8 +11,14 @@ export default {
   nav_login: 'Login',
   nav_register: 'Register',
   nav_profile: 'Profile',
+  nav_bookings: 'Bookings',
   nav_logout: 'Logout',
 
+  empty_data: 'Empty',
+  status_waiting: 'Waiting',
+  status_failed: 'Failed',
+  status_success: 'Booked',
+  
   login_title: 'Login',
   login_email: 'Email',
   login_email_placeholder: 'email_example@mail.com',
@@ -50,6 +56,7 @@ export default {
   ticket_detail_buy_btn: 'Buy Now',
   ticket_detail_desc: 'Description',
 
+  payment_title: 'Payment',
   payment_previous_btn: 'Previous',
   payment_next_btn: 'Next',
   payment_finish_btn: 'Finish',
@@ -57,7 +64,19 @@ export default {
   payment_step_2_name: 'Add Coupon',
   payment_step_3_name: 'Payment',
   payment_step_4_name: 'Summary',
-  
+  payment_total: 'Total',
+  payment_prct_detail_page_title: 'Select ticket variant',
+  payment_add_cpn_page_title: 'Select your preferred coupon',
+  payment_add_cpn_page_prc_cut_none: 'Total Price',
+  payment_add_cpn_page_prc_cut: 'Price Cut to',
+  payment_payment_page_title: 'Select your payment method',
+  payment_payment_transfer: 'Transfer',
+  payment_payment_onsitepay: 'Onsite Payment',
+  payment_summary_total_payment: 'Total Payment',
+  payment_summary_payment_method: 'Payment Method',
+  payment_step_1_not_complete: 'Please select variant first!',
+  payment_step_3_not_complete: 'Please select payment method!',
 
-  empty_data: 'Empty'
+  bookings_title: 'Bookings',
+  bookings_variant: 'Variant',
 };

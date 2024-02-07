@@ -5,7 +5,8 @@ import { SET_LOGIN, SET_TOKEN, SET_USER_DATA } from '@containers/Client/constant
 export const initialState = {
   login: false,
   token: null,
-  userData: null
+  userData: null,
+  role: null
 };
 
 export const storedKey = ['token', 'login'];

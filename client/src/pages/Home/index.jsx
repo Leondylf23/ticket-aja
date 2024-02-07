@@ -58,7 +58,7 @@ Home.propTypes = {
 }
 
 const mapStateToProps = createStructuredSelector({
-  
+
 });
 
 export default connect(mapStateToProps)(Home);

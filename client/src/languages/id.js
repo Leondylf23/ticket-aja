@@ -11,7 +11,13 @@ export default {
   nav_login: 'Masuk',
   nav_register: 'Daftar',
   nav_profile: 'Profil',
+  nav_bookings: 'Pemesanan',
   nav_logout: 'Keluar',
+  
+  empty_data: 'Kosong',
+  status_waiting: 'Menunggu',
+  status_failed: 'Gagal',
+  status_success: 'Terpesan',
 
   login_title: 'Masuk',
   login_email: 'Email',
@@ -50,6 +56,7 @@ export default {
   ticket_detail_buy_btn: 'Beli Sekarang',
   ticket_detail_desc: 'Deskripsi',
 
+  payment_title: 'Pembayaran',
   payment_previous_btn: 'Sebelumnya',
   payment_next_btn: 'Selanjutnya',
   payment_finish_btn: 'Selesai',
@@ -60,11 +67,16 @@ export default {
   payment_total: 'Total',
   payment_prct_detail_page_title: 'Pilih variant tiket',
   payment_add_cpn_page_title: 'Pilih kupon yang diinginkan',
+  payment_add_cpn_page_prc_cut_none: 'Total Harga',
   payment_add_cpn_page_prc_cut: 'Dipotong menjadi',
   payment_payment_page_title: 'Pilih metode pembayaran Anda',
   payment_payment_transfer: 'Transfer',
   payment_payment_onsitepay: 'Bayar di tempat',
   payment_summary_total_payment: 'Total Pembayaran',
+  payment_summary_payment_method: 'Methode Pembayaran',
+  payment_step_1_not_complete: 'Silahkan pilih varian terlebih dahulu!',
+  payment_step_3_not_complete: 'Silahkan pilih metode pembayaran!',
 
-  empty_data: 'Kosong'
+  bookings_title: 'Pemesanan',
+  bookings_variant: 'Varian',
 };
