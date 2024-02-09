@@ -9,6 +9,7 @@ const urls = {
   register: 'auth/register',
   ticket: 'ticket/ticket',
   coupons: 'ticket/coupon',
+  booking: 'ticket/booking'
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -48,5 +49,14 @@ export const deleteTicketApi = (formData) => callAPI(`${urls.ticket}/delete`, 'd
 
 // Coupons
 export const getAllCoupons = () => callAPI(urls.coupons, 'get');
+export const getAllCouponsByTicketId = (formData) => callAPI(`${urls.coupons}/byticket`, 'get', {}, formData);
 export const createNewCoupon = (formData) => callAPI(`${urls.coupons}/create`, 'post', {}, {}, formData);
 export const deleteCoupon = (formData) => callAPI(`${urls.coupons}/delete`, 'delete', {}, {}, formData);
+
+// Bookings
+export const getAllBookingsApi = () => callAPI(urls.booking, 'get');
+export const getBookingDetailApi = (formData) => callAPI(`${urls.booking}/detail`, 'get', {}, formData);
+export const getAllBusinessBookingsApi = () => callAPI(`${urls.booking}/business`, 'get');
+export const getBusinessBookingDetailApi = (formData) => callAPI(`${urls.booking}/business/detail`, 'get', {}, formData);
+export const createBookingApi = (formData) => callAPI(`${urls.booking}/create`, 'post', {}, {}, formData);
+export const updateBookingStatusApi = (formData) => callAPI(`${urls.booking}/status/update`, 'patch', {}, {}, formData);

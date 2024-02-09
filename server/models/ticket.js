@@ -17,7 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.hasMany(models.coupon, {
-        foreignKey: "createdBy",
+        foreignKey: 'createdBy',
+        sourceKey: 'createdBy'
+      });
+
+      this.hasMany(models.booking, {
+        foreignKey: 'ticketId',
       });
     }
   }

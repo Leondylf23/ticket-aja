@@ -54,11 +54,14 @@
 
     width: 100%;
     margin-top: 0.5rem;
-
-    .title {
+    .bookCode {
       font-weight: 700;
-      margin-bottom: 0.2rem;
       font-size: 1.2rem;
+    }
+    .title {
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+      font-size: 0.8rem;
     }
     .variant {
       font-weight: 500;
@@ -74,6 +77,17 @@
 .detailContainer {
   @include directionY;
 
+  .buttonContainer {
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    .backBtn {
+      @include button;
+    }
+  }
+  .bookingCode {
+    margin-bottom: 0.5rem;
+  }
   .contentContainer {
     @include directionY;
     gap: 0.5rem;
@@ -188,6 +202,17 @@
         @include statusContainer;
 
         margin-bottom: 0.5rem;
+      }
+      .statusBtnContainer {
+        @include directionX;
+
+        gap: 0.5rem;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+
+        .button {
+          @include button;
+        }
       }
       .descriptionTitle {
         margin-bottom: 0.5rem;

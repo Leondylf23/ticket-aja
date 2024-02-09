@@ -32,7 +32,14 @@ module.exports = {
         defaultValue: true
       },
       createdBy: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'id',
+          as: 'createdBy',
+        }
       },
       createdAt: {
         allowNull: false,

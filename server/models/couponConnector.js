@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class coupon_connector extends Model {
+  class couponConnector extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,24 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.coupon, {
-        foreignKey: 'coupon_id',
+        foreignKey: 'couponId',
         onDelete: "CASCADE"
       });
 
       this.belongsTo(models.booking, {
-        foreignKey: 'booking_id',
+        foreignKey: 'bookingId',
         onDelete: "CASCADE"
       });
     }
   }
-  coupon_connector.init({
-    coupon_id: DataTypes.INTEGER,
-    booking_id: DataTypes.INTEGER,
+  couponConnector.init({
+    couponId: DataTypes.INTEGER,
+    bookingId: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,
-    is_active: DataTypes.BOOLEAN
+    isActive: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'coupon_connector',
+    modelName: 'couponConnector',
   });
-  return coupon_connector;
+  return couponConnector;
 };

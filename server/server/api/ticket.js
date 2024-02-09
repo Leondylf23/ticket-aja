@@ -1,10 +1,11 @@
 const Router = require('express').Router();
 
 const ValidationTicket = require('../helpers/validationTicketHelper');
-const TraverticketHelper = require('../helpers/ticketHelper');
+const TicketHelper = require('../helpers/ticketHelper');
 const GeneralHelper = require('../helpers/generalHelper');
 const AuthMiddleware = require('../middlewares/authMiddleware');
 const MulterMiddleware = require('../middlewares/multerMiddleware');
+const UtilsHelper = require('../helpers/utilsHelper');
 const Boom = require('boom');
 
 const fileName = 'server/api/travelticket.js';
@@ -16,8 +17,10 @@ const allBookings = async (request, reply) => {
     try {
         ValidationTicket.allBookingValidation(request.query);
 
-        const formData = request.query;
-        const response = await TraverticketHelper.getAllBooking(formData);
+        const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
+
+        const response = await TicketHelper.getAllBooking(userData?.userId, false);
 
         return reply.send({
             message: 'success',
@@ -31,10 +34,13 @@ const allBookings = async (request, reply) => {
 
 const getBookingDetail = async (request, reply) => {
     try {
-        ValidationTicket.bookingDetailValidation(request.query);
+        ValidationTicket.idValidation(request.query);
 
-        const { bookingId } = request.query;
-        const response = await TraverticketHelper.getBookingDetailWithId({ bookingId });
+        const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
+
+        const formData = request.query;
+        const response = await TicketHelper.getBookingDetailWithId(formData);
 
         return reply.send({
             message: 'success',
@@ -46,12 +52,52 @@ const getBookingDetail = async (request, reply) => {
     }
 };
 
+const allBusinessBookings = async (request, reply) => {
+    try {
+        ValidationTicket.allBookingValidation(request.query);
+
+        const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
+        const response = await TicketHelper.getAllBooking(userData?.userId, true);
+
+        return reply.send({
+            message: 'success',
+            data: response
+        });
+    } catch (err) {
+        console.log([fileName, 'All Bookings API', 'ERROR'], { info: `${err}` });
+        return reply.send(GeneralHelper.errorResponse(err));
+    }
+};
+
+const getBusinessBookingDetail = async (request, reply) => {
+    try {
+        ValidationTicket.idValidation(request.query);
+
+        const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
+        const formData = request.query;
+        const response = await TicketHelper.getBookingDetailWithId(formData);
+
+        return reply.send({
+            message: 'success',
+            data: response
+        });
+    } catch (err) {
+        console.log([fileName, 'Booking Detail API', 'ERROR'], { info: `${err}` });
+        return reply.send(GeneralHelper.errorResponse(err));
+    }
+};
+
+
 const allCoupons = async (request, reply) => {
     try {
         const userData = GeneralHelper.getUserData(request);
         if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
 
-        const response = await TraverticketHelper.getAllCoupons(userData?.userId);
+        const response = await TicketHelper.getAllCoupons(userData?.userId);
 
         return reply.send({
             message: 'success',
@@ -63,12 +109,32 @@ const allCoupons = async (request, reply) => {
     }
 };
 
+const allCouponsByTicketId = async (request, reply) => {
+    try {
+        ValidationTicket.idValidation(request.query);
+
+        const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
+
+        const formData = request.query;
+        const response = await TicketHelper.getAllCouponsByTicketId(formData, userData?.userId);
+
+        return reply.send({
+            message: 'success',
+            data: response
+        });
+    } catch (err) {
+        console.log([fileName, 'All Coupons by Ticket Id API', 'ERROR'], { info: `${err}` });
+        return reply.send(GeneralHelper.errorResponse(err));
+    }
+};
+
 const allTickets = async (request, reply) => {
     try {
         ValidationTicket.allTicketsValidation(request.query);
 
         const formData = request.query;
-        const response = await TraverticketHelper.getAllTickets(formData);
+        const response = await TicketHelper.getAllTickets(formData);
 
         return reply.send({
             message: 'success',
@@ -85,7 +151,7 @@ const ticketDetail = async (request, reply) => {
         ValidationTicket.idValidation(request.query);
 
         const formData = request.query;
-        const response = await TraverticketHelper.getTicketDetail(formData, null, false);
+        const response = await TicketHelper.getTicketDetail(formData, null, false);
 
         return reply.send({
             message: 'success',
@@ -103,7 +169,7 @@ const allMyTickets = async (request, reply) => {
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.query;
-        const response = await TraverticketHelper.getAllTickets(formData, userData?.role === 'business' ? userData?.userId : null);
+        const response = await TicketHelper.getAllTickets(formData, userData?.role === 'business' ? userData?.userId : null);
 
         return reply.send({
             message: 'success',
@@ -121,7 +187,7 @@ const myTicketDetail = async (request, reply) => {
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.query;
-        const response = await TraverticketHelper.getTicketDetail(formData, userData?.userId, true);
+        const response = await TicketHelper.getTicketDetail(formData, userData?.userId, true);
 
         return reply.send({
             message: 'success',
@@ -144,7 +210,7 @@ const createTicket = async (request, reply) => {
         if (!imageFile) throw Boom.badRequest('Image file required!');
 
         const formData = request.body;
-        const response = await TraverticketHelper.addTicket({ ...formData, imageData: imageFile[0] }, userData?.userId);
+        const response = await TicketHelper.addTicket({ ...formData, imageData: imageFile[0] }, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -158,11 +224,17 @@ const createTicket = async (request, reply) => {
 
 const createBooking = async (request, reply) => {
     try {
-        ValidationTicket.bookingDataFormValidation(request.body);
+        ValidationTicket.bookingRequestValidation(request.body);
 
         const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
+
         const formData = request.body;
-        const response = await TraverticketHelper.addBooking(formData, userData?.userId);
+        const decryptData = {...JSON.parse(UtilsHelper.decryptData(formData?.data))};
+
+        ValidationTicket.bookingDataFormValidation(decryptData);
+
+        const response = await TicketHelper.addBooking(decryptData, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -180,9 +252,9 @@ const createCoupon = async (request, reply) => {
 
         const userData = GeneralHelper.getUserData(request);
         if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
-        
+
         const formData = request.body;
-        const response = await TraverticketHelper.addCoupon(formData, userData?.userId);
+        const response = await TicketHelper.addCoupon(formData, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -204,7 +276,7 @@ const editTicket = async (request, reply) => {
         const imageFile = request?.files?.imageData;
 
         const formData = request.body;
-        const response = await TraverticketHelper.editTicketData({...formData, imageData: Array.isArray(imageFile) ? imageFile[0] : null}, userData?.userId);
+        const response = await TicketHelper.editTicketData({...formData, imageData: Array.isArray(imageFile) ? imageFile[0] : null}, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -216,20 +288,22 @@ const editTicket = async (request, reply) => {
     }
 };
 
-const editCoupon = async (request, reply) => {
+const updateBookingStatus = async (request, reply) => {
     try {
-        ValidationTicket.editCouponFormValidation(request.body);
+        ValidationTicket.editBookingStatusValidation(request.body);
 
         const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
         const formData = request.body;
-        const response = await TraverticketHelper.editCouponData(formData, userData?.userId);
+        const response = await TicketHelper.updateStatusBooking(formData, userData?.userId);
 
         return reply.send({
             message: "success",
             data: response
         });
     } catch (err) {
-        console.log([fileName, 'Edit Coupon Data API', 'ERROR'], { info: `${err}` });
+        console.log([fileName, 'Delete Ticket Data API', 'ERROR'], { info: `${err}` });
         return reply.send(GeneralHelper.errorResponse(err));
     }
 };
@@ -242,7 +316,7 @@ const deleteTicket = async (request, reply) => {
         if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
 
         const formData = request.body;
-        const response = await TraverticketHelper.deleteTicket(formData, userData?.userId);
+        const response = await TicketHelper.deleteTicket(formData, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -260,7 +334,7 @@ const deleteCoupon = async (request, reply) => {
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.body;
-        const response = await TraverticketHelper.deleteCoupons(formData, userData?.userId);
+        const response = await TicketHelper.deleteCoupons(formData, userData?.userId);
 
         return reply.send({
             message: "success",
@@ -272,9 +346,12 @@ const deleteCoupon = async (request, reply) => {
     }
 };
 
-Router.get('/booking', allBookings);
-Router.get('/booking/detail', getBookingDetail);
+Router.get('/booking', AuthMiddleware.validateToken, allBookings);
+Router.get('/booking/detail', AuthMiddleware.validateToken, getBookingDetail);
+Router.get('/booking/business', AuthMiddleware.validateToken, allBusinessBookings);
+Router.get('/booking/business/detail', AuthMiddleware.validateToken, getBusinessBookingDetail);
 Router.get('/coupon', AuthMiddleware.validateToken, allCoupons);
+Router.get('/coupon/byticket', AuthMiddleware.validateToken, allCouponsByTicketId);
 Router.get('/ticket', allTickets);
 Router.get('/ticket/detail', ticketDetail);
 
@@ -287,7 +364,7 @@ Router.post('/coupon/create', AuthMiddleware.validateToken, createCoupon);
 Router.put('/ticket/create', AuthMiddleware.validateToken, MulterMiddleware.fields([{ name: 'imageData', maxCount: 1 }]), createTicket);
 
 Router.patch('/ticket/edit', AuthMiddleware.validateToken, MulterMiddleware.fields([{ name: 'imageData', maxCount: 1 }]), editTicket);
-Router.patch('/coupon/edit', AuthMiddleware.validateToken, editCoupon);
+Router.patch('/booking/status/update', AuthMiddleware.validateToken, updateBookingStatus);
 
 Router.delete('/ticket/delete', AuthMiddleware.validateToken, deleteTicket);
 Router.delete('/coupon/delete', AuthMiddleware.validateToken, deleteCoupon);

@@ -10,13 +10,33 @@ import BookingCard from './components/BookingCard';
 import BookingDetail from './components/BookingDetail';
 
 import classes from './style.module.scss';
+import { getBookingsData, setBookingsData } from './actions';
+import { selectUserData } from '@containers/Client/selectors';
+import { getUserDataDecrypt } from '@utils/allUtils';
 
-const Bookings = ({ bookingData }) => {
+const Bookings = ({ bookingData, userData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
 
     const [detailId, setDetailId] = useState(null);
+    const [isBusiness, setIsBusiness] = useState(false);
+
+    const backBtn = (isRefresh) => {
+        if(isRefresh) dispatch(getBookingsData(isBusiness));
+        setDetailId(null);
+    }
+
+    useEffect(() => {
+        let isBusinessTemp = false;
+        if(userData) {
+            const user = getUserDataDecrypt(userData);
+            isBusinessTemp = user && user?.role === 'business';
+            setIsBusiness(isBusinessTemp);
+        }
+        dispatch(setBookingsData([]));
+        dispatch(getBookingsData(isBusinessTemp));
+    }, [userData]);
 
     return (
         <div className={classes.mainContainer}>
@@ -26,7 +46,7 @@ const Bookings = ({ bookingData }) => {
                     {bookingData.length > 0 ? <div className={classes.dataGrid}>
                         <div className={classes.innerDataGrid}>
                             {bookingData.map(booking =>
-                                <BookingCard data={booking} onClickDetail={(data) => { }} key={booking?.id} />
+                                <BookingCard data={booking} onClickDetail={(id) => setDetailId(id)} key={booking?.id} />
                             )}
                         </div>
                     </div> : <div className={classes.empty}>
@@ -34,18 +54,20 @@ const Bookings = ({ bookingData }) => {
                     </div>}
                 </div>
                 :
-                <BookingDetail id={detailId} />
+                <BookingDetail id={detailId} back={backBtn} isBusiness={isBusiness} />
             }
         </div>
     );
 };
 
 Bookings.propTypes = {
-    bookingData: PropTypes.array
+    bookingData: PropTypes.array,
+    userData: PropTypes.string
 }
 
 const mapStateToProps = createStructuredSelector({
-    bookingData: selectBookingData
+    bookingData: selectBookingData,
+    userData: selectUserData
 });
 
 export default connect(mapStateToProps)(Bookings);

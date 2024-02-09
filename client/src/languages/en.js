@@ -19,6 +19,7 @@ export default {
   status_waiting: 'Waiting',
   status_failed: 'Failed',
   status_success: 'Booked',
+  back: 'Back',
   
   login_title: 'Login',
   login_email: 'Email',
@@ -97,6 +98,7 @@ export default {
   payment_add_cpn_page_title: 'Select your preferred coupon',
   payment_add_cpn_page_prc_cut_none: 'Total Price',
   payment_add_cpn_page_prc_cut: 'Price Cut to',
+  payment_add_cpn_page_prc_cut_validation: 'Coupon total is more than base price!',
   payment_payment_page_title: 'Select your payment method',
   payment_payment_transfer: 'Transfer',
   payment_payment_onsitepay: 'Onsite Payment',
@@ -105,9 +107,12 @@ export default {
   payment_summary_payment_method: 'Payment Method',
   payment_step_1_not_complete: 'Please select variant first!',
   payment_step_3_not_complete: 'Please select payment method!',
+  payment_step_complete: 'Booking has been created!',
 
   bookings_title: 'Bookings',
   bookings_variant: 'Variant',
+  bookings_update_status_complete: 'Booking Success',
+  bookings_update_status_failed: 'Booking Failed',
 
   coupons_title: 'Coupons',
   coupons_create_new: 'Create New',

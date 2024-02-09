@@ -2,40 +2,45 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('coupon_connectors', {
+    await queryInterface.createTable('bookings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      coupon_id: {
+      ticketId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
-          model: 'coupons',
+          model: 'tickets',
           key: 'id',
-          as: 'coupon_id',
+          as: 'ticketId',
         }
       },
-      booking_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'bookings',
-          key: 'id',
-          as: 'booking_id',
-        }
+      status: {
+        allowNull: false,
+        type: Sequelize.STRING(10),
+        defaultValue: 'WAITING'
+      },
+      isActive: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       },
       createdBy: {
         allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      is_active: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 1
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'id',
+          as: 'createdBy',
+        }
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
@@ -44,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('coupon_connectors');
+    await queryInterface.dropTable('bookings');
   }
 };

@@ -11,20 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.coupon_connector, {
-        foreignKey: "coupon_id",
-      });
-
-      this.hasOne(models.ticket, {
-        foreignKey: "createdBy",
+      this.hasMany(models.couponConnector, {
+        foreignKey: "couponId",
       });
     }
   }
   coupon.init({
-    coupon_name: DataTypes.STRING,
-    coupon_prc_cut: DataTypes.DECIMAL,
+    couponName: DataTypes.STRING,
+    couponPrcCut: DataTypes.DECIMAL,
     createdBy: DataTypes.INTEGER,
-    is_active: DataTypes.BOOLEAN
+    isActive: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'coupon',

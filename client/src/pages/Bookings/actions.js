@@ -1,20 +1,28 @@
-import { GET_BOOKING_DATA, GET_BOOKING_DETAIL_DATA, SET_BOOKING_DATA, SET_BOOKING_DETAIL_DATA } from "./constants";
+import { GET_BOOKING_DATA, GET_BOOKING_DETAIL_DATA, SET_BOOKING_DATA, SET_BOOKING_DETAIL_DATA, UPDATE_BOOKING_STATUS } from "./constants";
 
-export const getProductData = () => ({
+export const getBookingsData = (isBusiness) => ({
     type: GET_BOOKING_DATA,
+    isBusiness
 });
 
-export const setProductData = (data) => ({
+export const setBookingsData = (data) => ({
     type: SET_BOOKING_DATA,
     data
 });
 
-export const getBookingDetailData = (id) => ({
+export const getBookingDetailData = (formData, isBusiness) => ({
     type: GET_BOOKING_DETAIL_DATA,
-    id
+    formData,
+    isBusiness
 });
 
 export const setBookingDetailData = (data) => ({
     type: SET_BOOKING_DETAIL_DATA,
     data
+});
+
+export const updateBookingStatus = (formData, cb) => ({
+    type: UPDATE_BOOKING_STATUS,
+    formData,
+    cb
 });

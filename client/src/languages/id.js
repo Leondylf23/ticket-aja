@@ -19,6 +19,7 @@ export default {
   status_waiting: 'Menunggu',
   status_failed: 'Gagal',
   status_success: 'Terpesan',
+  back: 'Kembali',
 
   login_title: 'Masuk',
   login_email: 'Email',
@@ -97,6 +98,7 @@ export default {
   payment_add_cpn_page_title: 'Pilih kupon yang diinginkan',
   payment_add_cpn_page_prc_cut_none: 'Total Harga',
   payment_add_cpn_page_prc_cut: 'Dipotong menjadi',
+  payment_add_cpn_page_prc_cut_validation: 'Total kupon melebihi dari harga awal',
   payment_payment_page_title: 'Pilih metode pembayaran Anda',
   payment_payment_transfer: 'Transfer',
   payment_payment_onsitepay: 'Bayar di tempat',
@@ -105,9 +107,12 @@ export default {
   payment_summary_payment_method: 'Methode Pembayaran',
   payment_step_1_not_complete: 'Silahkan pilih varian terlebih dahulu!',
   payment_step_3_not_complete: 'Silahkan pilih metode pembayaran!',
+  payment_step_complete: 'Pesanan telah dibuat!',
 
   bookings_title: 'Pemesanan',
   bookings_variant: 'Varian',
+  bookings_update_status_complete: 'Pesanan Selesai',
+  bookings_update_status_failed: 'Pesanan Gagal',
 
   coupons_title: 'Kupon',
   coupons_create_new: 'Buat Baru',

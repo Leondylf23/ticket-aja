@@ -5,49 +5,37 @@ const { like } = require('sequelize/lib/operators');
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
 const { uploadToCloudinary } = require('../services/cloudinary');
-const { encryptData } = require('./utilsHelper');
+const { encryptData, generateRandomString } = require('./utilsHelper');
 
 // PRIVATE FUNCTIONS
 
 // TICKET HELPERS FUNCTIONS
-const getAllBooking = async (dataObject) => {
-    const { bookingType, customerName } = dataObject;
-
+const getAllBooking = async (userId, isBusiness) => {
     try {
         const data = await db.booking.findAll({
             include: [
                 {
-                    association: 'customer',
+                    association: 'ticket',
                     required: true,
-                    where: {
-                        is_active: true,
-                        ...(customerName && { customer_name: { [like]: `%${customerName}%` } })
-                    },
-                    attributes: ['customer_name']
-                },
-                {
-                    association: 'coupon_connectors',
-                    required: false,
-                    where: { is_active: true },
-                    attributes: ['id'],
-                    include: [
-                        {
-                            association: 'coupon',
-                            required: true,
-                            where: { is_active: true },
-                            attributes: ['coupon_name', 'coupon_prc_cut']
-                        }
-                    ]
+                    attributes: ['title', 'imageUrl'],
+                    where: {...(isBusiness && { isActive: true, })},
                 },
             ],
-            where: {
-                is_active: true,
-                ...(bookingType && { booking_type: bookingType })
+            where: { 
+                isActive: true, 
+                ...(isBusiness ? { businessUserId: userId } : { createdBy: userId })
             },
-            attributes: { exclude: ['is_active', 'customer_id'] }
+            attributes: ['id', 'bookingCode', 'status', 'variant']
         });
 
-        return Promise.resolve(data);
+        const remapData = data?.map(booking => ({
+            ...booking?.dataValues,
+            ...booking?.ticket?.dataValues,
+            variant: booking?.dataValues?.variant?.variantName,
+            ticket: undefined
+        }));
+
+        return Promise.resolve(remapData);
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
     }
@@ -55,36 +43,36 @@ const getAllBooking = async (dataObject) => {
 
 const getBookingDetailWithId = async (dataObject) => {
     try {
+        const { id } = dataObject;
         const data = await db.booking.findOne({
             include: [
                 {
-                    association: 'customer',
+                    association: 'ticket',
                     required: true,
-                    where: { is_active: true },
-                    attributes: ['customer_name']
-                },
-                {
-                    association: 'coupon_connectors',
-                    required: false,
-                    where: { is_active: true },
-                    attributes: ['id'],
+                    attributes: ['title', 'imageUrl', 'location', 'description'],
                     include: [
                         {
-                            association: 'coupon',
+                            association: 'user',
                             required: true,
-                            where: { is_active: true },
-                            attributes: ['coupon_name', 'coupon_prc_cut']
-                        }
+                            attributes: ['fullname'],
+                        },
                     ]
                 },
             ],
-            attributes: { exclude: ['is_active', 'customer_id'] },
-            where: { id: dataObject?.bookingId, is_active: true },
+            attributes: ['bookingCode', 'status', 'variant', 'paymentMethod'],
+            where: { id, isActive: true },
         });
 
         if (_.isEmpty(data)) throw Boom.notFound('Booking detail is not found!');
 
-        return Promise.resolve(data);
+        const remapData = {
+            ...data?.dataValues,
+            ...data?.ticket?.dataValues,
+            organization: data?.ticket?.user?.dataValues?.fullname,
+            ticket: undefined
+        }
+
+        return Promise.resolve(remapData);
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
     }
@@ -99,7 +87,7 @@ const getAllTickets = async (dataObject, userId) => {
                 {
                     association: 'user',
                     required: true,
-                    where: { is_active: true },
+                    where: { isActive: true },
                     attributes: [['fullname', 'organization']]
                 },
             ],
@@ -139,7 +127,7 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
                     {
                         association: 'user',
                         required: true,
-                        where: { is_active: true },
+                        where: { isActive: true },
                         attributes: [['fullname', 'organization']]
                     },
                 ],
@@ -154,7 +142,7 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
         const remapData = {
             ...data?.dataValues,
             createdBy: undefined,
-            ...(!isBusiness && {organization: data?.user?.dataValues?.organization})
+            ...(!isBusiness && { organization: data?.user?.dataValues?.organization })
         }
 
         if (isBusiness && data?.dataValues?.createdBy !== userId) throw Boom.badData('Cannot access other user data!');
@@ -169,10 +157,10 @@ const getAllCoupons = async (userId) => {
     try {
         const data = await db.coupon.findAll({
             where: {
-                is_active: true,
+                isActive: true,
                 createdBy: userId
             },
-            attributes: [['coupon_name', 'name'], ['coupon_prc_cut', 'priceCut'], 'id']
+            attributes: [['couponName', 'name'], ['couponPrcCut', 'priceCut'], 'id']
         });
 
         return Promise.resolve(data);
@@ -181,19 +169,39 @@ const getAllCoupons = async (userId) => {
     }
 };
 
-const getAllCouponsByTicketId = async (dataObject) => {
+const getAllCouponsByTicketId = async (dataObject, userId) => {
     const { id } = dataObject;
 
     try {
-        const data = await db.coupon.findOne({
+        const data = await db.ticket.findOne({
+            include: [
+                {
+                    association: 'coupons',
+                    required: false,
+                    where: { isActive: true },
+                    attributes: ['id', ['couponName', 'name'], ['couponPrcCut', 'priceCut']],
+                    include: [
+                        {
+                            association: 'couponConnectors',
+                            required: false,
+                            where: { isActive: false, createdBy: userId },
+                        }
+                    ]
+                },
+            ],
             where: {
-                is_active: true,
-                createdBy: userId
+                isActive: true,
+                id
             },
-            attributes: { exclude: ['is_active'] }
         });
 
-        return Promise.resolve(data);
+        const couponList = data?.coupons?.map(coupon => ({
+            ...coupon?.dataValues,
+            couponConnectors: undefined,
+            priceCut: encryptData(coupon?.dataValues?.priceCut)
+        }));
+
+        return Promise.resolve(couponList);
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
     }
@@ -227,18 +235,41 @@ const addTicket = async (dataObject, userId) => {
 
 const addBooking = async (dataObject, userId) => {
     try {
-        const { customerId, type, price } = dataObject;
+        const { ticketId, variant, paymentMethod, totalPayment, coupons } = dataObject;
 
-        const checkCustomerId = await db.customer.findOne({
-            where: { id: customerId, is_active: true }
+        const checkTicketId = await db.ticket.findOne({
+            where: { id: ticketId, isActive: true }
         });
-        if (_.isEmpty(checkCustomerId)) throw Boom.notFound("Customer not found from this id!")
+        if (_.isEmpty(checkTicketId)) throw Boom.notFound("Ticket not found from this id!");
 
-        const data = await db.booking.create({ customer_id: customerId, booking_type: type, booking_price: price, createdBy: userId });
+        const dateNow = new Date().toISOString().slice(0, 10);
+        const transactionId = `TRX/${dateNow}/${generateRandomString(5)}`;
+
+        const result = await db.sequelize.transaction(async () => {
+            const createdBooking = await db.booking.create({ 
+                ticketId, 
+                variant, 
+                paymentMethod, 
+                totalPayment, 
+                createdBy: userId, 
+                businessUserId: checkTicketId?.dataValues?.createdBy, 
+                bookingCode: transactionId 
+            });
+            if(!createdBooking?.id) throw new Error('Booking not created!');
+
+            const bookingId = createdBooking?.id;
+            for (let index = 0; index < coupons.length; index++) {
+                const coupon = coupons[index];
+
+                const createdTickets = await db.couponConnector.create({bookingId, couponId: coupon, createdBy: userId});
+                if(!createdTickets?.id) throw new Error('Connector not created!');
+            }
+
+            return bookingId;
+        });
 
         return Promise.resolve({
-            createdId: data?.id,
-            createdData: data
+            createdId: result,
         });
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
@@ -249,7 +280,7 @@ const addCoupon = async (dataObject, userId) => {
     try {
         const { name, priceCut } = dataObject;
 
-        const data = await db.coupon.create({ coupon_name: name, coupon_prc_cut: priceCut, createdBy: userId });
+        const data = await db.coupon.create({ couponName: name, couponPrcCut: priceCut, createdBy: userId });
 
         return Promise.resolve({
             createdId: data?.id,
@@ -296,23 +327,22 @@ const editTicketData = async (dataObject, userId) => {
     }
 };
 
-const editCouponData = async (dataObject, userId) => {
+const updateStatusBooking = async (dataObject, userId) => {
     try {
-        const { id, name, priceCut } = dataObject;
+        const { id, isSuccess } = dataObject;
 
-        const data = await db.coupon.findOne({
-            where: { id, is_active: true }
+        const data = await db.booking.findOne({
+            where: { id, isActive: true, status: 'WAITING' }
         });
-        if (_.isEmpty(data)) throw Boom.notFound('Coupon not found!');
+        if (_.isEmpty(data)) throw Boom.notFound('Booking not found!');
 
-        const userIdCheck = data?.dataValues?.createdBy;
+        const userIdCheck = data?.dataValues?.businessUserId;
         if (userIdCheck !== userId) throw Boom.unauthorized('Your user account does not allowed to modify other user data!');
 
-        await data.update({ coupon_name: name, coupon_prc_cut: priceCut });
+        await data.update({ status: isSuccess ? 'BOOKED' : 'FAILED' });
 
         return Promise.resolve({
             updatedId: data?.id,
-            updatedData: data
         });
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
@@ -346,14 +376,14 @@ const deleteCoupons = async (dataObject, userId) => {
         const { id } = dataObject;
 
         const data = await db.coupon.findOne({
-            where: { id, is_active: true }
+            where: { id, isActive: true }
         });
         if (_.isEmpty(data)) throw Boom.notFound('Coupon not found!');
 
         const userIdCheck = data?.dataValues?.createdBy;
         if (userIdCheck !== userId) throw Boom.unauthorized('Your user account does not allowed to modify other user data!');
 
-        await data.update({ is_active: false });
+        await data.update({ isActive: false });
 
         return Promise.resolve({
             deletedId: data?.id,
@@ -367,6 +397,7 @@ module.exports = {
     getAllBooking,
     getBookingDetailWithId,
     getAllCoupons,
+    getAllCouponsByTicketId,
     getAllTickets,
     getTicketDetail,
 
@@ -375,7 +406,7 @@ module.exports = {
     addTicket,
 
     editTicketData,
-    editCouponData,
+    updateStatusBooking,
 
     deleteTicket,
     deleteCoupons,

@@ -13,8 +13,9 @@ import PaymentSumary from './components/PaymentSumary';
 import classes from './style.module.scss';
 import { selectProductId, selectUserInputData } from './selectors';
 import { showPopup } from '@containers/App/actions';
-import { setProductId, setUserInputs } from './actions';
+import { sendBookingData, setProductId, setUserInputs } from './actions';
 import { selectTicketDetail } from '@pages/TicketDetail/selectors';
+import { encryptDataAES } from '@utils/allUtils';
 
 const PaymentPage = ({ inputtedData, productId, productDetail }) => {
     const dispatch = useDispatch();
@@ -63,7 +64,18 @@ const PaymentPage = ({ inputtedData, productId, productDetail }) => {
     };
 
     const finish = () => {
-        navigate('/bookings');
+        const encryptedData = encryptDataAES(JSON.stringify({
+            ...inputtedData,
+            ticketId: productId,
+            paymentMethod: inputtedData?.paymentMethod?.id,
+            coupons: inputtedData?.coupons?.map(coupon => coupon?.id)
+        }));
+
+        dispatch(sendBookingData({data: encryptedData}, () => {
+            dispatch(setUserInputs(null));
+            dispatch(showPopup(intl.formatMessage({ id: 'payment_title' }), intl.formatMessage({ id: 'payment_step_complete' })));
+            navigate('/bookings');
+        }));
     };
 
     useEffect(() => {

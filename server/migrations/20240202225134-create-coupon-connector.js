@@ -2,24 +2,40 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('customers', {
+    await queryInterface.createTable('couponConnectors', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      customer_name: {
-        type: Sequelize.STRING
+      couponId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'coupons',
+          key: 'id',
+          as: 'couponId',
+        }
       },
-      customer_dob: {
-        type: Sequelize.DATE
+      bookingId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'bookings',
+          key: 'id',
+          as: 'bookingId',
+        }
       },
       createdBy: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'id',
+          as: 'createdBy',
+        }
       },
-      is_active: {
+      isActive: {
         type: Sequelize.BOOLEAN,
         defaultValue: 1
       },
@@ -34,6 +50,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('customers');
+    await queryInterface.dropTable('couponConnectors');
   }
 };

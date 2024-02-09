@@ -14,7 +14,7 @@ import { setLogin, setToken, setUserData } from "@containers/Client/actions";
 
 import classes from "./style.module.scss";
 
-function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
+function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu, isBusiness }) {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -60,10 +60,10 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
                 <BallotIcon className={classes.iconBookings} />
                 <Typography variant="body2"><FormattedMessage id="nav_bookings" /></Typography>
             </MenuItem>
-            <MenuItem onClick={() => menuItemAction(2)}>
+            {isBusiness && <MenuItem onClick={() => menuItemAction(2)}>
                 <DiscountIcon className={classes.iconDiscount} />
                 <Typography variant="body2"><FormattedMessage id="nav_coupons" /></Typography>
-            </MenuItem>
+            </MenuItem>}
             <div className={classes.divider}></div>
             <MenuItem onClick={() => menuItemAction(3)}>
                 <LogoutIcon className={classes.iconLogout} />
@@ -78,6 +78,7 @@ DropDownMenu.propType = {
     onClose: PropType.func.isRequired,
     labeledMenu: PropType.string.isRequired,
     anchorEl: PropType.element.isRequired,
+    isBusiness: PropType.bool
 }
 
 export default DropDownMenu;

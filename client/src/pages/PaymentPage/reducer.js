@@ -3,23 +3,7 @@ import { SET_COUPONS_DATA, SET_PRODUCT_ID, SET_USER_INPUTS } from './constants';
 
 export const initialState = {
     userInputData: null,
-    couponsData: [
-        {
-            id: 1,
-            name: 'Diskon 100k',
-            priceCut: 100000
-        },
-        {
-            id: 2,
-            name: 'Diskon 50k',
-            priceCut: 50000
-        },
-        {
-            id: 3,
-            name: 'Diskon 30k',
-            priceCut: 30000
-        },
-    ],
+    couponsData: [],
     productId: null
 };
 

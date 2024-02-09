@@ -25,6 +25,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
   const [menuPosition, setMenuPosition] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
+  const [isBusiness, setIsBusiness] = useState(false);
 
   const open = Boolean(menuPosition);
   const isOpenMenu = Boolean(anchorEl);
@@ -64,6 +65,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
     if(userData) {
       const user = getUserDataDecrypt(userData);
       setProfileImg(user?.profileImage);
+      setIsBusiness(user?.role === 'business');
     }
   }, [userData]);
 
@@ -77,7 +79,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
           {isUserLogined ?
             <div className={classes.profile}>
               <Avatar className={classes.avatar} src={profileImg} onClick={openCloseProfileMenu} />
-              <DropDownMenu isOpen={isOpenMenu} anchorEl={anchorEl} onClose={openCloseProfileMenu} labeledMenu={""} />
+              <DropDownMenu isOpen={isOpenMenu} anchorEl={anchorEl} onClose={openCloseProfileMenu} labeledMenu={""} isBusiness={isBusiness} />
             </div> : <div className={classes.userButtons}>
               <button className={classes.login} onClick={() => navigate('/login')}>
                 <FormattedMessage id="nav_login" />

@@ -11,23 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.customer, {
-        foreignKey: 'customer_id',
+      this.belongsTo(models.ticket, {
+        foreignKey: 'ticketId',
         onDelete: "CASCADE"
       });
 
-      this.hasMany(models.coupon_connector, {
-        foreignKey: "booking_id",
+      this.hasMany(models.couponConnector, {
+        foreignKey: "bookingId",
       });
 
     }
   }
   booking.init({
-    customer_id: DataTypes.INTEGER,
-    booking_type: DataTypes.STRING,
-    booking_price: DataTypes.DECIMAL,
+    ticketId: DataTypes.INTEGER,
+    bookingCode: DataTypes.STRING,
+    status: DataTypes.STRING(10),
     createdBy: DataTypes.INTEGER,
-    is_active: DataTypes.BOOLEAN
+    variant: DataTypes.JSON,
+    paymentMethod: DataTypes.STRING(20),
+    totalPayment: DataTypes.DECIMAL(10, 2),
+    businessUserId: DataTypes.INTEGER,
+    isActive: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'booking',

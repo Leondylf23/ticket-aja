@@ -27,9 +27,9 @@ module.exports = {
       role: {
         type: Sequelize.STRING(10)
       },
-      is_active: {
+      isActive: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 1
+        defaultValue: true
       },
       createdAt: {
         allowNull: false,

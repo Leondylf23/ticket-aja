@@ -35,10 +35,10 @@ function* doGetMyTicketDetail({ formData, cbError }) {
 }
 
 function* doUpdateTicket({ formData, cb }) {
-    const res = yield put(setLoading(true));
+    yield put(setLoading(true));
 
     try {
-        yield call(updateTicketApi, formData);
+        const res = yield call(updateTicketApi, formData);
         yield put(setMyTicketDetail(res?.data?.updatedData));
 
         cb();

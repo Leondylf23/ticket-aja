@@ -12,16 +12,6 @@ const allBookingValidation = (data) => {
   }
 };
 
-const bookingDetailValidation = (data) => {
-  const schema = Joi.object({
-    bookingId: Joi.number().integer().required().description('Booking id')
-  });
-
-  if (schema.validate(data).error) {
-    throw Boom.badRequest(schema.validate(data).error);
-  }
-};
-
 const allTicketsValidation = (data) => {
   const schema = Joi.object({
     ticketName: Joi.string().optional().description("Search ticket name")
@@ -66,11 +56,26 @@ const customerFormValidation = (data) => {
   }
 };
 
+const bookingRequestValidation = (data) => {
+  const schema = Joi.object({
+    data: Joi.string().required().description('Encrypted data payment required')
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const bookingDataFormValidation = (data) => {
   const schema = Joi.object({
-    customerId: Joi.number().integer().required().description('Id of customer'),
-    type: Joi.string().valid('VIP','ECO').required().description('Type of booking, allowed only VIP and ECO.'),
-    price: Joi.number().min(5000).max(2000000).precision(2).required().description('Price of booking, should be minimum of 5000 and maximum of 2000000')
+    ticketId: Joi.number().required().description('Ticket id is required!'), 
+    variant: Joi.object({
+      variantName: Joi.string().required().description('Variant name is required!'),
+      price: Joi.number().required().description('Price is required!')
+    }).required().description('Variant is required!'), 
+    paymentMethod: Joi.string().required().description('Payment method is required!'), 
+    totalPayment: Joi.number().required().description('Total payment is required!'), 
+    coupons: Joi.array().items(Joi.number().description('Coupon data must be number!')).required().description('Coupons is required!')
   });
 
   if (schema.validate(data).error) {
@@ -138,6 +143,17 @@ const editCouponFormValidation = (data) => {
   }
 };
 
+const editBookingStatusValidation = (data) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().required().description('Id of booking'),
+    isSuccess: Joi.boolean().required().description('Must provide success value!')
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const idValidation = (data) => {
   const schema = Joi.object({
     id: Joi.number().integer().required().description('Id must be number'),
@@ -150,12 +166,12 @@ const idValidation = (data) => {
 
 module.exports = {
   allBookingValidation,
-  bookingDetailValidation,
   allCustomersValidation,
   allTicketsValidation,
 
   ticketFormValidation,
   customerFormValidation,
+  bookingRequestValidation,
   bookingDataFormValidation,
   couponDataFormValidation,
   appendCouponValidation,
@@ -163,6 +179,7 @@ module.exports = {
   editTicketFormValidation,
   editCustomerFormValidation,
   editCouponFormValidation,
+  editBookingStatusValidation,
 
   idValidation
 };

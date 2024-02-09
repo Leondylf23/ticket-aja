@@ -9,19 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      coupon_name: {
+      couponName: {
         type: Sequelize.STRING
       },
-      coupon_prc_cut: {
+      couponPrcCut: {
         type: Sequelize.DECIMAL(10, 2)
       },
-      is_active: {
+      isActive: {
         type: Sequelize.BOOLEAN,
-        defaultValue: 1
+        defaultValue: true
       },
       createdBy: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'users',
+          key: 'id',
+          as: 'createdBy',
+        }
       },
       createdAt: {
         allowNull: false,

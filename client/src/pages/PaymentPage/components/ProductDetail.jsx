@@ -17,26 +17,30 @@ const ProductDetailComponent = ({ ticketData, inputtedData }) => {
     const dispatch = useDispatch();
 
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const [variants, setVariants] = useState([]);
 
     const setVariantData = (data) => {
         setSelectedVariant(data);
     };
 
     useEffect(() => {
+        if(ticketData?.variants) {
+            setVariants(JSON.parse(ticketData?.variants));
+        }
         if (inputtedData?.variant) {
             setSelectedVariant(inputtedData?.variant);
         }
     }, []);
     useEffect(() => {
         dispatch(setUserInputs({ ...inputtedData, variant: selectedVariant, totalPayment: selectedVariant?.price }));
-    }, [selectedVariant])
+    }, [selectedVariant]);
 
     return (
         <div className={classes.componentContainer}>
             <h2 className={classes.title}>{ticketData?.title}</h2>
             <h4 className={classes.pageTitle}><FormattedMessage id='payment_prct_detail_page_title' /></h4>
             <div className={classes.variantContainer}>
-                {ticketData?.variants?.map(variant =>
+                {variants.map(variant =>
                     <div className={classes.variant} key={variant?.variantName} onClick={() => setVariantData(variant)} data-active={variant === selectedVariant}>
                         <a>{variant?.variantName}</a>
                     </div>

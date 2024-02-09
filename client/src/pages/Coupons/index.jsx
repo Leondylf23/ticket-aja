@@ -57,7 +57,7 @@ const Coupons = ({ couponDatas, userData }) => {
             {couponDatas?.length > 0 ?
                 <div className={classes.dataContainer}>
                     {couponDatas?.map(coupon =>
-                        <CouponsCard key={data?.id} data={coupon} onDelete={onDeleteCoupon} />
+                        <CouponsCard key={coupon?.id} data={coupon} onDelete={onDeleteCoupon} />
                     )}
                 </div>
                 :

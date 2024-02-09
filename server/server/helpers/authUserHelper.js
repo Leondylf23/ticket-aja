@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
-const { encryptData } = require('./utilsHelper');
+const { encryptData, generateRandomString } = require('./utilsHelper');
 
 const passwordSaltRound = bcrypt.genSaltSync(12);
 const signatureSecretKey = process.env.SIGN_SECRET_KEY || 'pgJApn9pJ8';
@@ -19,19 +19,6 @@ const __generateHashPassword = (password) => {
 const __compareHashPassword = (inputedPassword, hashedPassword) => {
     return bcrypt.compareSync(inputedPassword, hashedPassword)
 };
-
-const __generateRandomString = (length) => {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-  
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      result += charset.charAt(randomIndex);
-    }
-  
-    return result;
-};
-
 
 // AUTH USER HELPERS FUNCTIONS
 const loginAuthentication = async (dataObject) => {
@@ -140,7 +127,7 @@ const resetPassword = async (dataObject) => {
 
         if(_.isEmpty(data)) throw Boom.badData('Unknown email!');
 
-        const randomString = __generateRandomString(14);
+        const randomString = generateRandomString(14);
         const hashedNewPassword = __generateHashPassword(randomString);
         const checkUpdate = await data.update({ password: hashedNewPassword });
         if(_.isEmpty(checkUpdate)) throw Boom.internal('Password not reset!');

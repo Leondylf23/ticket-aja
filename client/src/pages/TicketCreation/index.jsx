@@ -133,9 +133,14 @@ const TicketCreation = ({ ticketDetail, userData }) => {
                 <div className={classes.leftContent}>
                     <img className={classes.image} src={imageData ? URL.createObjectURL(imageData) : (formData?.imageUrl ?? 'https://d2kwwar9pcd0an.cloudfront.net/8823600fdfa118bad6245f3f56852341.jpeg')} alt="Img failed!" />
                     <div className={classes.contentDetails}>
-                        <label htmlFor='imageInput' className={classes.fileInput}><FormattedMessage id='ticket_creation_chg_img_btn' /></label>
-                        <input hidden id='imageInput' type="file" accept='image/*' onChange={setNewImage} />
-                        <button className={classes.deleteBtn} data-type='red' onClick={() => removeImage()}><FormattedMessage id='ticket_creation_rmv_img_btn' /></button>
+                        {imageData ?
+                            <button className={classes.deleteBtn} data-type='red' onClick={() => removeImage()}><FormattedMessage id='ticket_creation_rmv_img_btn' /></button>
+                            :
+                            <>
+                                <label htmlFor='imageInput' className={classes.fileInput}><FormattedMessage id='ticket_creation_chg_img_btn' /></label>
+                                <input hidden id='imageInput' type="file" accept='image/*' onChange={setNewImage} />
+                            </>
+                        }
                     </div>
                 </div>
                 <div className={classes.rightContent}>

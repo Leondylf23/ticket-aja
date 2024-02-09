@@ -11,9 +11,11 @@ import { selectCouponsData, selectProductId, selectUserInputData } from '../sele
 
 import classes from '../style.module.scss';
 import { getCouponsData, setUserInputs } from '../actions';
+import { showPopup } from '@containers/App/actions';
 
 const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
     const dispatch = useDispatch();
+    const intl = useIntl();
 
     const [basePrice, setBasePrice] = useState(0);
     const [selectedCoupons, setSelectedCoupons] = useState([]);
@@ -24,11 +26,15 @@ const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
         let priceCutData = totalPriceCut;
 
         if(find) {
-            setSelectedCoupons(prevVal => prevVal.filter(cpn => cpn?.id !== coupon?.id));
             priceCutData -= coupon?.priceCut;
+            setSelectedCoupons(prevVal => prevVal.filter(cpn => cpn?.id !== coupon?.id));
         } else {
-            setSelectedCoupons(prevVal => [...prevVal, coupon]);
             priceCutData += coupon?.priceCut;
+            if((basePrice - priceCutData) < 0) {
+                dispatch(showPopup(intl.formatMessage({ id: 'payment_title' }), intl.formatMessage({ id: 'payment_add_cpn_page_prc_cut_validation' })));
+                return;
+            }
+            setSelectedCoupons(prevVal => [...prevVal, coupon]);
         }
         setTotalPriceCut(priceCutData);
     };
@@ -40,18 +46,17 @@ const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
     useEffect(() => {
         let totalPayment = inputtedData?.variant?.price;
         if(selectedCoupons?.length > 0) {
-
             selectedCoupons.forEach(coupon => {
                 totalPayment -= coupon?.priceCut;
             });
-
         }
         dispatch(setUserInputs({...inputtedData, coupons: selectedCoupons, totalPayment}));
     }, [selectedCoupons]);
     useEffect(() => {
-        dispatch(getCouponsData(productId));
+        dispatch(getCouponsData({id: productId}));
+        const basePriceData = inputtedData?.variant?.price;
 
-        if(inputtedData?.variant?.price) setBasePrice(inputtedData?.variant?.price);
+        if(basePriceData) setBasePrice(basePriceData);
         if(inputtedData?.coupons) {
             const coupons = inputtedData?.coupons;
             let totalPriceCutTemp = 0;
@@ -60,6 +65,12 @@ const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
                 const priceCut = coupon?.priceCut;
                 totalPriceCutTemp += priceCut;
             });
+
+            if((basePriceData - totalPriceCutTemp) < 0) {
+                dispatch(showPopup(intl.formatMessage({ id: 'payment_title' }), intl.formatMessage({ id: 'payment_add_cpn_page_prc_cut_validation' })));
+                dispatch(setUserInputs({...inputtedData, coupons: [], totalPayment: basePriceData}));
+                return;
+            }
 
             setTotalPriceCut(totalPriceCutTemp);
             setSelectedCoupons(coupons)
