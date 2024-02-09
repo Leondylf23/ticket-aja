@@ -2,15 +2,21 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 
 import { showPopup, setLoading } from '@containers/App/actions';
 import { GET_PRODUCT_DATA } from './constants';
+import { getTicketDetailApi } from '@domain/api';
+import { setProductData } from './actions';
 
-function* doGetProductData({ id, cb }) {
+function* doGetProductData({ formData, cbNotFound }) {
     yield put(setLoading(true));
 
     try {
-        // yield call(register, formData);
+        const res = yield call(getTicketDetailApi, formData);
 
-        cb();
+        yield put(setProductData(res?.data));
     } catch (error) {
+        if(error?.response?.status === 404) {
+            cbNotFound();
+            return;
+        }
         yield put(showPopup());
     }
 

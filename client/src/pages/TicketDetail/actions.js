@@ -1,9 +1,9 @@
 import { GET_PRODUCT_DATA, SET_PRODUCT_DATA } from "./constants";
 
-export const getProductData = (id, cd) => ({
+export const getProductData = (formData, cbNotFound) => ({
     type: GET_PRODUCT_DATA,
-    id,
-    cd
+    formData,
+    cbNotFound
 });
 
 export const setProductData = (data) => ({

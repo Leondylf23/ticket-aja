@@ -60,8 +60,10 @@ export default {
   home_create_new: 'Buat Baru',
   home_search_placeholder: 'Cari tiket...',
 
+  ticket_detail_title: 'Detil Tiket',
   ticket_detail_buy_btn: 'Beli Sekarang',
   ticket_detail_desc: 'Deskripsi',
+  ticket_detail_not_found: 'Tiket tidak ditemukan!',
 
   ticket_creation_title: 'Buat Ticket',
   ticket_creation_chg_img_btn: 'Ganti Gambar',

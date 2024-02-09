@@ -134,6 +134,16 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
         const { id } = dataObject;
 
         const data = await db.ticket.findOne({
+            ...(!isBusiness && {
+                include: [
+                    {
+                        association: 'user',
+                        required: true,
+                        where: { is_active: true },
+                        attributes: [['fullname', 'organization']]
+                    },
+                ],
+            }),
             where: {
                 isActive: true,
                 id
@@ -143,7 +153,8 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
 
         const remapData = {
             ...data?.dataValues,
-            createdBy: undefined
+            createdBy: undefined,
+            ...(!isBusiness && {organization: data?.user?.dataValues?.organization})
         }
 
         if (isBusiness && data?.dataValues?.createdBy !== userId) throw Boom.badData('Cannot access other user data!');

@@ -12,6 +12,8 @@ import { numberWithPeriods } from '@utils/allUtils';
 import { selectTicketDetail } from './selectors';
 
 import classes from './style.module.scss';
+import { getProductData } from './actions';
+import { showPopup } from '@containers/App/actions';
 
 const TicketDetail = ({ ticketDetail }) => {
     const intl = useIntl();
@@ -33,26 +35,40 @@ const TicketDetail = ({ ticketDetail }) => {
     };
 
     useEffect(() => {
-        const resData = ticketDetail;
+        let resData = ticketDetail;
 
         if(!resData) return;
 
+        resData = {
+            ...resData,
+            variants: JSON.parse(resData?.variants)
+        }
+
         if (resData?.variants.length > 0) {
             const ticketVariants = resData.variants;
-            const defaultDataIndex = ticketVariants.findIndex(variant => variant.isDefault);
+            const defaultDataIndex = 0;
 
             setSelectedVariantIndex(defaultDataIndex);
             setSelectedVariant(ticketVariants[defaultDataIndex]);
         }
-
         setDetailData(resData);
     }, [ticketDetail]);
+    useEffect(() => {
+        if(id) {
+            dispatch(getProductData({id}, () => {
+                dispatch(showPopup(intl.formatMessage({id: 'ticket_detail_title'}), intl.formatMessage({id: 'ticket_detail_not_found'})));
+                navigate('/');
+            }))
+        } else {
+            navigate('/');
+        }
+    }, [id]);
 
     return (
         <div className={classes.mainContainer}>
             <div className={classes.topContentContainer}>
                 <div className={classes.leftContent}>
-                    <img className={classes.image} src={detailData?.image} alt="Img failed!" />
+                    <img className={classes.image} src={detailData?.imageUrl} alt="Img failed!" />
                     <div className={classes.contentDetails}>
                         <div className={classes.detailIconContainer}>
                             <FmdGoodIcon className={classes.icon} />
@@ -60,7 +76,7 @@ const TicketDetail = ({ ticketDetail }) => {
                         </div>
                         <div className={classes.detailIconContainer}>
                             <AssignmentIndIcon className={classes.icon} />
-                            <p className={classes.text}>{detailData?.organizer}</p>
+                            <p className={classes.text}>{detailData?.organization}</p>
                         </div>
                     </div>
                 </div>
