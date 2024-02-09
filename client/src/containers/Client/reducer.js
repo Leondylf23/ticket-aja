@@ -6,10 +6,9 @@ export const initialState = {
   login: false,
   token: null,
   userData: null,
-  role: null
 };
 
-export const storedKey = ['token', 'login'];
+export const storedKey = ['token', 'login', 'userData'];
 
 const clientReducer = (state = initialState, action) =>
   produce(state, (draft) => {

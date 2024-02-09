@@ -10,6 +10,7 @@ import TicketDetail from '@pages/TicketDetail';
 import Bookings from '@pages/Bookings';
 import TicketCreation from '@pages/TicketCreation';
 import Coupons from '@pages/Coupons';
+import Profile from '@pages/Profile';
 
 const routes = [
   {
@@ -25,6 +26,13 @@ const routes = [
     protected: false,
     component: Login,
     layout: BlankLayout,
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    protected: true,
+    component: Profile,
+    layout: MainLayout,
   },
   {
     path: '/register',

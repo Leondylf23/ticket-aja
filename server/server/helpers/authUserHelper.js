@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
+const { encryptData } = require('./utilsHelper');
 
 const passwordSaltRound = bcrypt.genSaltSync(12);
 const signatureSecretKey = process.env.SIGN_SECRET_KEY || 'pgJApn9pJ8';
@@ -32,12 +33,12 @@ const __generateRandomString = (length) => {
 };
 
 
-// AUTH ADMIN HELPERS FUNCTIONS
+// AUTH USER HELPERS FUNCTIONS
 const loginAuthentication = async (dataObject) => {
     const { email, password } = dataObject;
 
     try {
-        const data = await db.admin.findOne({
+        const data = await db.user.findOne({
             where: { email }
         });
 
@@ -49,27 +50,32 @@ const loginAuthentication = async (dataObject) => {
         if(!isValid) throw Boom.unauthorized('Wrong email or password!');
 
         const fullname = data?.dataValues?.fullname;
+        const profileImage = data?.dataValues?.profileImage;
+        const role = data?.dataValues?.role;
         const userId = data?.dataValues?.id;
-        const constructData = { userId, fullname };
-
+        const constructData = { userId, role };
+        const frontEndUserData = {
+            fullname,
+            profileImage,
+            role
+        };
+        const encryptedUserData = encryptData(JSON.stringify(frontEndUserData));
         const token = jwt.sign(constructData, signatureSecretKey, { expiresIn: sessionAge });
 
         return Promise.resolve({
             token,
-            userData: {
-                fullname
-            }
+            userData: encryptedUserData
         });
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
     }
 };
 
-const createNewAdmin = async (dataObject) => {
-    const { fullname, dob, email, password } = dataObject;
+const registerUser = async (dataObject) => {
+    const { fullname, dob, email, password, role } = dataObject;
 
     try {
-        const checkData = await db.admin.findOne({
+        const checkData = await db.user.findOne({
             where: { email }
         });
 
@@ -77,8 +83,8 @@ const createNewAdmin = async (dataObject) => {
 
         const hashedPassword = __generateHashPassword(password);
 
-        const createdAdmin = await db.admin.create({ fullname, dob, email, password: hashedPassword });
-        if(_.isEmpty(createdAdmin)) throw Boom.internal('Admin not created!');
+        const createdUser = await db.user.create({ fullname, dob, email, password: hashedPassword, role });
+        if(_.isEmpty(createdUser)) throw Boom.internal('User not created!');
 
         return Promise.resolve({
             message: 'Register success, please login with new credentials!'
@@ -88,9 +94,9 @@ const createNewAdmin = async (dataObject) => {
     }
 };
 
-const getAdminProfile = async (adminId) => {
+const getUserProfile = async (userId) => {
     try {
-        const data = await db.admin.findByPk(adminId);
+        const data = await db.user.findByPk(userId);
 
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
         
@@ -103,11 +109,11 @@ const getAdminProfile = async (adminId) => {
     }
 };
 
-const changePassword = async (dataObject, adminId) => {
+const changePassword = async (dataObject, userId) => {
     const { oldPassword, newPassword } = dataObject;
 
     try {
-        const data = await db.admin.findByPk(adminId);
+        const data = await db.user.findByPk(userId);
 
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
 
@@ -130,7 +136,7 @@ const resetPassword = async (dataObject) => {
     const { email } = dataObject;
 
     try {
-        const data = await db.admin.findOne({ where: {email} });
+        const data = await db.user.findOne({ where: {email} });
 
         if(_.isEmpty(data)) throw Boom.badData('Unknown email!');
 
@@ -148,11 +154,11 @@ const resetPassword = async (dataObject) => {
     }
 };
 
-const updateProfile = async (dataObject, adminId) => {
+const updateProfile = async (dataObject, userId) => {
     const { fullname, dob } = dataObject;
 
     try {
-        const data = await db.admin.findByPk(adminId);
+        const data = await db.user.findByPk(userId);
 
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
 
@@ -167,8 +173,8 @@ const updateProfile = async (dataObject, adminId) => {
 
 module.exports = {
     loginAuthentication,
-    createNewAdmin,
-    getAdminProfile,
+    registerUser,
+    getUserProfile,
     changePassword,
     resetPassword,
     updateProfile

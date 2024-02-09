@@ -1,24 +1,24 @@
 const Router = require('express').Router();
 
-const ValidationAuthAdmin = require('../helpers/validationAuthAdmin');
-const AuthAdminHelper = require('../helpers/authAdminHelper');
+const ValidationAuthUser = require('../helpers/validationAuthUser');
+const AuthUserHelper = require('../helpers/authUserHelper');
 const GeneralHelper = require('../helpers/generalHelper');
 const AuthMiddleware = require('../middlewares/authMiddleware');
 const { decryptData } = require('../helpers/utilsHelper');
 
-const fileName = 'server/api/authAdmin.js';
+const fileName = 'server/api/authUser.js';
 
-const getAdminProfileData = async (request, reply) => {
+const getUserProfileData = async (request, reply) => {
     try {
         const userData = GeneralHelper.getUserData(request);
-        const response = await AuthAdminHelper.getAdminProfile(userData.userId);
+        const response = await AuthUserHelper.getUserProfile(userData.userId);
 
         return reply.send({
             message: 'success',
             data: response
         });
     } catch (err) {
-        console.log([fileName, 'Get Admin Profile API', 'ERROR'], { info: `${err}` });
+        console.log([fileName, 'Get User Profile API', 'ERROR'], { info: `${err}` });
         return reply.send(GeneralHelper.errorResponse(err));
     }
 }
@@ -27,13 +27,13 @@ const login = async (request, reply) => {
     try {
         const formData = request.body;
         const decryptedData = {
-            ...(formData?.email && {email: decryptData(formData?.email)}),
-            ...(formData?.password && {password: decryptData(formData?.password)}),
+            ...(formData?.email && { email: decryptData(formData?.email) }),
+            ...(formData?.password && { password: decryptData(formData?.password) }),
         }
 
-        ValidationAuthAdmin.loginFormValidation(decryptedData);
-        
-        const response = await AuthAdminHelper.loginAuthentication(decryptedData);
+        ValidationAuthUser.loginFormValidation(decryptedData);
+
+        const response = await AuthUserHelper.loginAuthentication(decryptedData);
 
         return reply.send({
             message: 'success',
@@ -49,15 +49,16 @@ const register = async (request, reply) => {
     try {
         const formData = request.body;
         const decryptedData = {
-            ...(formData?.email && {email: decryptData(formData?.email)}),
-            ...(formData?.password && {password: decryptData(formData?.password)}),
-            ...(formData?.fullname && {fullname: decryptData(formData?.fullname)}),
-            ...(formData?.dob && {dob: decryptData(formData?.dob)}),
+            ...(formData?.email && { email: decryptData(formData?.email) }),
+            ...(formData?.password && { password: decryptData(formData?.password) }),
+            ...(formData?.fullname && { fullname: decryptData(formData?.fullname) }),
+            ...(formData?.dob && { dob: decryptData(formData?.dob) }),
+            ...(formData?.role && { role: decryptData(formData?.role) }),
         }
 
-        ValidationAuthAdmin.registerFormValidation(decryptedData);
+        ValidationAuthUser.registerFormValidation(decryptedData);
 
-        const response = await AuthAdminHelper.createNewAdmin(decryptedData);
+        const response = await AuthUserHelper.registerUser(decryptedData);
 
         return reply.send({
             message: 'success',
@@ -71,11 +72,11 @@ const register = async (request, reply) => {
 
 const changePassword = async (request, reply) => {
     try {
-        ValidationAuthAdmin.changePasswordFormValidation(request.body);
+        ValidationAuthUser.changePasswordFormValidation(request.body);
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.body;
-        const response = await AuthAdminHelper.changePassword(formData, userData.userId);
+        const response = await AuthUserHelper.changePassword(formData, userData.userId);
 
         return reply.send({
             message: 'success',
@@ -89,10 +90,10 @@ const changePassword = async (request, reply) => {
 
 const resetPassword = async (request, reply) => {
     try {
-        ValidationAuthAdmin.resetPasswordFormValidation(request.body);
+        ValidationAuthUser.resetPasswordFormValidation(request.body);
 
         const formData = request.body;
-        const response = await AuthAdminHelper.resetPassword(formData);
+        const response = await AuthUserHelper.resetPassword(formData);
 
         return reply.send({
             message: 'success',
@@ -106,11 +107,11 @@ const resetPassword = async (request, reply) => {
 
 const updateProfile = async (request, reply) => {
     try {
-        ValidationAuthAdmin.updateProfileFormValidation(request.body);
+        ValidationAuthUser.updateProfileFormValidation(request.body);
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.body;
-        const response = await AuthAdminHelper.updateProfile(formData, userData.userId);
+        const response = await AuthUserHelper.updateProfile(formData, userData.userId);
 
         return reply.send({
             message: 'success',
@@ -122,7 +123,7 @@ const updateProfile = async (request, reply) => {
     }
 };
 
-Router.get('/profile', AuthMiddleware.validateToken, getAdminProfileData);
+Router.get('/profile', AuthMiddleware.validateToken, getUserProfileData);
 
 Router.post('/login', login);
 Router.post('/register', register);

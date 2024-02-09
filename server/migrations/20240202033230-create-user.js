@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('admins', {
+    await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,8 +18,14 @@ module.exports = {
       fullname: {
         type: Sequelize.STRING
       },
+      profileImage: {
+        type: Sequelize.TEXT
+      },
       dob: {
         type: Sequelize.DATE
+      },
+      role: {
+        type: Sequelize.STRING(10)
       },
       is_active: {
         type: Sequelize.BOOLEAN,
@@ -36,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('admins');
+    await queryInterface.dropTable('users');
   }
 };

@@ -114,8 +114,6 @@ const commonHttpRequest = async (options) => {
 const getUserData = (request) => {
   if(request?.header?.login) {
       return request?.header?.login
-  } else {
-      throw new Error('Invalid login');
   }
 }
 

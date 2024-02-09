@@ -7,8 +7,8 @@ const app = express();
 const Port = process.env.NODEJS_PORT || 8080;
 
 // Import routes
-const TravelTicket = require('./server/api/travelticket');
-const AuthAdmin = require('./server/api/authAdmin');
+const Ticket = require('./server/api/ticket');
+const AuthUser = require('./server/api/authUser');
 
 dotenv.config();
 
@@ -72,8 +72,8 @@ app.use((req, res, next) => {
 });
 
 // Route middlewares
-app.use('/api/travelticket', TravelTicket);
-app.use('/api/auth', AuthAdmin);
+app.use('/api/ticket', Ticket);
+app.use('/api/auth', AuthUser);
 
 // Sys ping api 
 app.get('/sys/ping', (req, res) => {

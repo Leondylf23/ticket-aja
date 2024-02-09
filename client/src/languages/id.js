@@ -12,6 +12,7 @@ export default {
   nav_register: 'Daftar',
   nav_profile: 'Profil',
   nav_bookings: 'Pemesanan',
+  nav_coupons: 'Kupon',
   nav_logout: 'Keluar',
   
   empty_data: 'Kosong',
@@ -38,6 +39,10 @@ export default {
   register_email_placeholder: 'contoh_email@mail.com',
   register_password: 'Kata Sandi',
   register_password_placeholder: 'p4sSW0rdR4haS1a',
+  register_role: 'Role',
+  register_role_placeholder: 'Pilih Role',
+  register_role_customer: 'Pelanggan',
+  register_role_business: 'Bisnis',
   register_button: 'Daftar',
   register_login_footer: 'Sudah punya akun? Masuk di ',
   register_login_footer_link: 'sini',
@@ -46,15 +51,36 @@ export default {
   register_dob_validation: 'Tanggal lahir harus diisi!',
   register_dob_age_validation: 'Anda harus berumur minimal 15+ untuk daftar!',
   register_password_validation: 'Password harus lebih sama dengan dari 6 karakter dan kurang sama dengan dari 20 karakter!',
+  register_role_valiation: 'Role harus dipilih!',
   register_email_has_taken: 'Email ini sudah digunakan!',
 
   ticket_card_price: 'orang',
 
   home_title: 'Cari Tiket',
+  home_create_new: 'Buat Baru',
   home_search_placeholder: 'Cari tiket...',
 
   ticket_detail_buy_btn: 'Beli Sekarang',
   ticket_detail_desc: 'Deskripsi',
+
+  ticket_creation_title: 'Buat Ticket',
+  ticket_creation_chg_img_btn: 'Ganti Gambar',
+  ticket_creation_rmv_img_btn: 'Hapus Gambar',
+  ticket_creation_title_label: 'Judul',
+  ticket_creation_location_label: 'Lokasi',
+  ticket_creation_variant_label: 'Varian',
+  ticket_creation_name_label: 'Nama',
+  ticket_creation_price_label: 'Harga (Rp.)',
+  ticket_creation_add_btn: 'Tambah',
+  ticket_creation_desc_label: 'Deskripsi',
+  ticket_creation_save_btn: 'Simpan',
+  ticket_creation_delete_btn: 'Hapus',
+  ticket_creation_title_validation: 'Judul harus lebih dari 5 karakter dan kurang sama dengan 255 karakter!',
+  ticket_creation_location_validation: 'Lokasi harus lebih dari 2 karakter dan kurang sama dengan 255 karakter!',
+  ticket_creation_description_validation: 'Deskripsi harus lebih dari 5 karakter dan kurang sama dengan 500 karakter!',
+  ticket_creation_variant_validation: 'Setidaknya memiliki 1 varian!',
+  ticket_creation_image_validation: 'Setidaknya memiliki gambar!',
+  ticket_creation_save_success: 'Berhasil disimpan!',
 
   payment_title: 'Pembayaran',
   payment_previous_btn: 'Sebelumnya',
@@ -72,6 +98,7 @@ export default {
   payment_payment_page_title: 'Pilih metode pembayaran Anda',
   payment_payment_transfer: 'Transfer',
   payment_payment_onsitepay: 'Bayar di tempat',
+  payment_summary_variant: 'Varian',
   payment_summary_total_payment: 'Total Pembayaran',
   payment_summary_payment_method: 'Methode Pembayaran',
   payment_step_1_not_complete: 'Silahkan pilih varian terlebih dahulu!',
@@ -79,4 +106,12 @@ export default {
 
   bookings_title: 'Pemesanan',
   bookings_variant: 'Varian',
+
+  coupons_title: 'Kupon',
+  coupons_create_new: 'Buat Baru',
+  coupons_name: 'Nama',
+  coupons_price_cut: 'Potongan Harga (Rp.)',
+  coupons_create: 'Buat',
+  coupons_name_validation: 'Nama harus minimal 5 karakter dan maksimal 255 karakter!',
+  coupons_price_cut_validation: 'Pemotongan harga harus minimal Rp. 5.000 dan maksimal Rp. 200.000!'
 };

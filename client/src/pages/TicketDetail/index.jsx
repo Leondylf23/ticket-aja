@@ -91,7 +91,7 @@ const TicketDetail = ({ ticketDetail }) => {
 };
 
 TicketDetail.propTypes = {
-    ticketDetail: PropTypes.array
+    ticketDetail: PropTypes.object
 }
 
 const mapStateToProps = createStructuredSelector({

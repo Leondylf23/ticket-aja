@@ -4,6 +4,16 @@
   .title {
     margin-bottom: 0.6rem;
   }
+  .createBtnContainer {
+    @include directionX;
+
+    justify-content: end;
+    margin-bottom: 0.6rem;
+
+    .button {
+      @include button;
+    }
+  }
   .searchContainer {
     @include directionY;
     @include padding(0.6rem);

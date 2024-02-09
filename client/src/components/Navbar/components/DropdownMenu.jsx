@@ -3,8 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import PropType from "prop-types";
 import Typography from '@mui/material/Typography';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
-import TurnedInNotIcon from '@mui/icons-material/TurnedInNot';
+import DiscountIcon from '@mui/icons-material/Discount';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
@@ -27,6 +26,10 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
                 break;
             case 1:
                 navigate("/bookings");
+                onClose();
+                break;
+            case 2:
+                navigate("/coupons");
                 onClose();
                 break;
             case 3:
@@ -56,6 +59,10 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu }) {
             <MenuItem onClick={() => menuItemAction(1)}>
                 <BallotIcon className={classes.iconBookings} />
                 <Typography variant="body2"><FormattedMessage id="nav_bookings" /></Typography>
+            </MenuItem>
+            <MenuItem onClick={() => menuItemAction(2)}>
+                <DiscountIcon className={classes.iconDiscount} />
+                <Typography variant="body2"><FormattedMessage id="nav_coupons" /></Typography>
             </MenuItem>
             <div className={classes.divider}></div>
             <MenuItem onClick={() => menuItemAction(3)}>

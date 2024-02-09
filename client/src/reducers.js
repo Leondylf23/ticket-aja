@@ -9,6 +9,8 @@ import ticketCreationReducer, { storedKey as storedTicketCreationState } from '@
 import languageReducer from '@containers/Language/reducer';
 
 import { mapWithPersistor } from './persistence';
+import couponsReducer from '@pages/Coupons/reducer';
+import homeReducer from '@pages/Home/reducer';
 
 const storedReducers = {
   app: { reducer: appReducer, whitelist: storedAppState },
@@ -21,6 +23,8 @@ const temporaryReducers = {
   ticketDetail: ticketDetailReducer,
   bookings: bookingsReducer,
   ticketCreation: ticketCreationReducer,
+  coupons: couponsReducer,
+  home: homeReducer
 };
 
 const createReducer = () => {

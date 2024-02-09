@@ -3,4 +3,4 @@ import { initialState } from '@containers/App/reducer';
 
 const selectTicketCreationState = (state) => state.ticketCreation || initialState;
 
-export const selectTicketDetailCreated = createSelector(selectTicketCreationState, (state) => state.productData);
+export const selectMyTicketData = createSelector(selectTicketCreationState, (state) => state.ticketData);

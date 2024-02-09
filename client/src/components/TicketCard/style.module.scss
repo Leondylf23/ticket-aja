@@ -43,6 +43,9 @@
         }
         .text {
           font-size: 0.9rem;
+          width: 100%;
+          overflow-x: hidden;
+          text-overflow: ellipsis
         }
       }
       .priceContainer {

@@ -12,6 +12,7 @@ export default {
   nav_register: 'Register',
   nav_profile: 'Profile',
   nav_bookings: 'Bookings',
+  nav_coupons: 'Coupons',
   nav_logout: 'Logout',
 
   empty_data: 'Empty',
@@ -38,6 +39,10 @@ export default {
   register_email_placeholder: 'email_example@mail.com',
   register_password: 'Password',
   register_password_placeholder: 's3CRetp4sSW0rd',
+  register_role: 'Role',
+  register_role_placeholder: 'Choose Role',
+  register_role_customer: 'Customer',
+  register_role_business: 'Business',
   register_button: 'Register',
   register_login_footer: 'Have account? Login ',
   register_login_footer_link: 'here',
@@ -46,15 +51,36 @@ export default {
   register_dob_validation: 'Date of Birth is required!',
   register_dob_age_validation: 'You must be at least 15+ years old to register!',
   register_password_validation: 'Password must be at least 6 characters long and lower equal than 20 characters!',
+  register_role_valiation: 'Role must be filled!',
   register_email_has_taken: 'This email has already been taken!',
 
   ticket_card_price: 'person',
 
   home_title: 'Browse Tickets',
+  home_create_new: 'Create New',
   home_search_placeholder: 'Search for tickets...',
 
   ticket_detail_buy_btn: 'Buy Now',
   ticket_detail_desc: 'Description',
+
+  ticket_creation_title: 'Ticket Creation',
+  ticket_creation_chg_img_btn: 'Change Image',
+  ticket_creation_rmv_img_btn: 'Delete Image',
+  ticket_creation_title_label: 'Title',
+  ticket_creation_location_label: 'Location',
+  ticket_creation_variant_label: 'Variant',
+  ticket_creation_name_label: 'Name',
+  ticket_creation_price_label: 'Price (Rp.)',
+  ticket_creation_add_btn: 'Add',
+  ticket_creation_desc_label: 'Description',
+  ticket_creation_save_btn: 'Save',
+  ticket_creation_delete_btn: 'Delete',
+  ticket_creation_title_validation: 'Title must be more than 5 characters and less equal than 255 characters!',
+  ticket_creation_location_validation: 'Location must be more than 5 characters and less equal than 255 characters!',
+  ticket_creation_description_validation: 'Description must be more than 5 characters and less equal than 255 characters!',
+  ticket_creation_variant_validation: 'At least have 1 variant!',
+  ticket_creation_image_validation: 'At least have an image!',
+  ticket_creation_save_success: 'Saved!',
 
   payment_title: 'Payment',
   payment_previous_btn: 'Previous',
@@ -72,6 +98,7 @@ export default {
   payment_payment_page_title: 'Select your payment method',
   payment_payment_transfer: 'Transfer',
   payment_payment_onsitepay: 'Onsite Payment',
+  payment_summary_variant: 'Variant',
   payment_summary_total_payment: 'Total Payment',
   payment_summary_payment_method: 'Payment Method',
   payment_step_1_not_complete: 'Please select variant first!',
@@ -79,4 +106,12 @@ export default {
 
   bookings_title: 'Bookings',
   bookings_variant: 'Variant',
+
+  coupons_title: 'Coupons',
+  coupons_create_new: 'Create New',
+  coupons_name: 'Name',
+  coupons_price_cut: 'Price Cut (Rp.)',
+  coupons_create: 'Create',
+  coupons_name_validation: 'Name must be 5 characters minimum and 255 characters maximum!',
+  coupons_price_cut_validation: 'Price cut must be Rp. 5.000 minimum and Rp. 200.000 maximum!'
 };

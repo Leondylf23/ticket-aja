@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { selectLogin, selectUserData } from '@containers/Client/selectors';
 import DropDownMenu from './components/DropdownMenu';
 
 import classes from './style.module.scss';
+import { getUserDataDecrypt } from '@utils/allUtils';
 
 const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
 
   const [menuPosition, setMenuPosition] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
 
   const open = Boolean(menuPosition);
   const isOpenMenu = Boolean(anchorEl);
@@ -58,6 +60,13 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
     navigate('/');
   };
 
+  useEffect(() => {
+    if(userData) {
+      const user = getUserDataDecrypt(userData);
+      setProfileImg(user?.profileImage);
+    }
+  }, [userData]);
+
   return (
     <div className={classes.headerWrapper} data-testid="navbar">
       <div className={classes.contentWrapper}>
@@ -67,7 +76,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
         <div className={classes.toolbar}>
           {isUserLogined ?
             <div className={classes.profile}>
-              <Avatar className={classes.avatar} src={userData?.image} onClick={openCloseProfileMenu} />
+              <Avatar className={classes.avatar} src={profileImg} onClick={openCloseProfileMenu} />
               <DropDownMenu isOpen={isOpenMenu} anchorEl={anchorEl} onClose={openCloseProfileMenu} labeledMenu={""} />
             </div> : <div className={classes.userButtons}>
               <button className={classes.login} onClick={() => navigate('/login')}>
@@ -115,7 +124,7 @@ Navbar.propTypes = {
   locale: PropTypes.string.isRequired,
   theme: PropTypes.string,
   isUserLogined: PropTypes.bool,
-  userData: PropTypes.object
+  userData: PropTypes.string
 };
 
 const mapStateToProps = createStructuredSelector({

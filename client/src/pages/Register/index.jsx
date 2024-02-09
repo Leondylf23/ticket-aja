@@ -20,6 +20,7 @@ const Register = ({ isLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [dob, setDob] = useState('');
+    const [role, setRole] = useState('');
 
     const sendRegister = (e) => {
         e.preventDefault();
@@ -44,6 +45,10 @@ const Register = ({ isLogin }) => {
             dispatch(showPopup(intl.formatMessage({ id: 'register_title' }), intl.formatMessage({ id: 'register_password_validation' })));
             return;
 
+        } else if (role === '') {
+            dispatch(showPopup(intl.formatMessage({ id: 'register_title' }), intl.formatMessage({ id: 'register_role_valiation' })));
+            return;
+
         }
 
         const formData = {
@@ -51,6 +56,7 @@ const Register = ({ isLogin }) => {
             email: encryptDataAES(email),
             password: encryptDataAES(password),
             dob: encryptDataAES(dob),
+            role: encryptDataAES(role)
         };
 
         dispatch(sendRegisterData(formData, () => {
@@ -81,6 +87,12 @@ const Register = ({ isLogin }) => {
                     <input type='email' id='email' className={classes.input} placeholder={intl.formatMessage({ id: 'register_email_placeholder' })} onChange={(e) => setEmail(e.target.value)} />
                     <label htmlFor='password' className={classes.label}><FormattedMessage id='register_password' /></label>
                     <input type='password' id='password' className={classes.input} placeholder={intl.formatMessage({ id: 'register_password_placeholder' })} onChange={(e) => setPassword(e.target.value)} />
+                    <label htmlFor='role' className={classes.label}><FormattedMessage id='register_role' /></label>
+                    <select name='role' id='role' className={classes.input} onChange={(e) => setRole(e.target.value)}>
+                        <option value=''><FormattedMessage id='register_role_placeholder' /></option>
+                        <option value='customer'><FormattedMessage id='register_role_customer' /></option>
+                        <option value='business'><FormattedMessage id='register_role_business' /></option>
+                    </select>
                     <button type='submit' className={classes.button}><FormattedMessage id='register_button' /></button>
                     <h3 className={classes.footer}>
                         <FormattedMessage id='register_login_footer' />

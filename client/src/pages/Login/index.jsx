@@ -37,7 +37,7 @@ const Login = ({ isLogin }) => {
             navigate('/');
         }, (err) => {
             if (err?.response?.status === 401) {
-                dispatch(showPopup(intl.formatMessage({ id: 'register_title' }), intl.formatMessage({ id: 'login_wrong_credentials' })));
+                dispatch(showPopup(intl.formatMessage({ id: 'login_title' }), intl.formatMessage({ id: 'login_wrong_credentials' })));
             } else {
                 dispatch(showPopup());
             }

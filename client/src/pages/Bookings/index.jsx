@@ -16,7 +16,7 @@ const Bookings = ({ bookingData }) => {
     const navigate = useNavigate();
     const intl = useIntl();
 
-    const [detailId, setDetailId] = useState('aa');
+    const [detailId, setDetailId] = useState(null);
 
     return (
         <div className={classes.mainContainer}>
