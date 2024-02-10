@@ -128,13 +128,18 @@ const updateProfile = async (request, reply) => {
     }
 };
 
-Router.get('/profile', AuthMiddleware.validateToken, getUserProfileData);
-
+// Public Routes
 Router.post('/login', login);
 Router.post('/register', register);
 Router.post('/resetpassword', resetPassword);
 
-Router.patch('/changepassword', AuthMiddleware.validateToken, changePassword);
+
+// Authenticated Only Routes
+Router.get('/profile', AuthMiddleware.validateToken, getUserProfileData);
+
 Router.patch('/profile/update', MulterMiddleware.fields([{ name: 'imageData', maxCount: 1 }]), AuthMiddleware.validateToken, updateProfile);
+Router.patch('/changepassword', AuthMiddleware.validateToken, changePassword);
+
+
 
 module.exports = Router;

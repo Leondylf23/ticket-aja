@@ -3,7 +3,7 @@ const Boom = require('boom');
 
 const allBookingValidation = (data) => {
   const schema = Joi.object({
-    bookingType: Joi.string().valid('VIP','ECO').optional().description('Type of booking, allowed only VIP and ECO.'),
+    bookingType: Joi.string().valid('VIP', 'ECO').optional().description('Type of booking, allowed only VIP and ECO.'),
     customerName: Joi.string().optional().description("Search customer name")
   });
 
@@ -68,18 +68,18 @@ const bookingRequestValidation = (data) => {
 
 const bookingDataFormValidation = (data) => {
   const schema = Joi.object({
-    ticketId: Joi.number().required().description('Ticket id is required!'), 
+    ticketId: Joi.number().required().description('Ticket id is required!'),
     variant: Joi.object({
       variantName: Joi.string().required().description('Variant name is required!'),
       price: Joi.number().min(5000).max(5000000).required().description('Price is required!')
-    }).required().description('Variant is required!'), 
-    paymentMethod: Joi.string().required().description('Payment method is required!'), 
-    totalPayment: Joi.number().required().description('Total payment is required!'), 
-    coupons: Joi.array().items(Joi.number().description('Coupon data must be number!')).required().description('Coupons is required!')
+    }).required().description('Variant is required!'),
+    paymentMethod: Joi.string().required().description('Payment method is required!'),
+    totalPayment: Joi.number().required().description('Total payment is required!'),
+    coupons: Joi.array().optional().items(Joi.number().description('Coupon data must be number!')).required().description('Coupons is required!')
   });
 
   if (schema.validate(data).error) {
-    throw Boom.badRequest(schema.validate(data).error);
+    throw Boom.badRequest('Form data not matched!');
   }
 };
 

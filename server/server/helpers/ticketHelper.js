@@ -153,6 +153,8 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
             attributes: { exclude: ['id', 'isActive', 'createdAt', 'updatedAt'] }
         });
 
+        if (_.isEmpty(data)) throw Boom.notFound('Ticket detail is not found!');
+
         const remapData = {
             ...data?.dataValues,
             createdBy: undefined,
@@ -230,7 +232,12 @@ const addTicket = async (dataObject, userId) => {
         const { title, location, variants, description, imageData } = dataObject;
 
         const imageResult = await uploadToCloudinary(imageData, 'image');
-        const firstVariantPrice = JSON.parse(variants)[0]?.price;
+        let firstVariantPrice = 0;
+        try {
+            firstVariantPrice = JSON.parse(variants)[0]?.price;
+        } catch (error) {
+            throw Boom.badRequest('Invalid JSON in variant!');
+        }
 
         const data = await db.ticket.create({ title, price: firstVariantPrice, location, variants, description, imageUrl: imageResult.url, createdBy: userId });
 

@@ -1,4 +1,5 @@
 const Router = require('express').Router();
+const Boom = require('boom');
 
 const ValidationTicket = require('../helpers/validationTicketHelper');
 const TicketHelper = require('../helpers/ticketHelper');
@@ -6,9 +7,8 @@ const GeneralHelper = require('../helpers/generalHelper');
 const AuthMiddleware = require('../middlewares/authMiddleware');
 const MulterMiddleware = require('../middlewares/multerMiddleware');
 const UtilsHelper = require('../helpers/utilsHelper');
-const Boom = require('boom');
 
-const fileName = 'server/api/travelticket.js';
+const fileName = 'server/api/ticket.js';
 
 // PRIVATE FUCNTIONS
 
@@ -168,6 +168,8 @@ const allMyTickets = async (request, reply) => {
         ValidationTicket.allTicketsValidation(request.query);
 
         const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
         const formData = request.query;
         const response = await TicketHelper.getAllTickets(formData, userData?.role === 'business' ? userData?.userId : null);
 
@@ -186,6 +188,8 @@ const myTicketDetail = async (request, reply) => {
         ValidationTicket.idValidation(request.query);
 
         const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
         const formData = request.query;
         const response = await TicketHelper.getTicketDetail(formData, userData?.userId, true);
 
@@ -230,7 +234,14 @@ const createBooking = async (request, reply) => {
         if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
 
         const formData = request.body;
-        const decryptData = {...JSON.parse(UtilsHelper.decryptData(formData?.data))};
+
+        let decryptData = null;
+        try {
+            decryptData = {...JSON.parse(UtilsHelper.decryptData(formData?.data))}
+            if(!decryptData) throw new Error('Data is null');
+        } catch (error) {
+            throw Boom.badRequest('Data decryption failed!');
+        }
 
         ValidationTicket.bookingDataFormValidation(decryptData);
 
@@ -333,6 +344,8 @@ const deleteCoupon = async (request, reply) => {
         ValidationTicket.idValidation(request.body);
 
         const userData = GeneralHelper.getUserData(request);
+        if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
+
         const formData = request.body;
         const response = await TicketHelper.deleteCoupons(formData, userData?.userId);
 
@@ -346,19 +359,26 @@ const deleteCoupon = async (request, reply) => {
     }
 };
 
-Router.get('/booking', AuthMiddleware.validateToken, allBookings);
-Router.get('/booking/detail', AuthMiddleware.validateToken, getBookingDetail);
-Router.get('/booking/business', AuthMiddleware.validateToken, allBusinessBookings);
-Router.get('/booking/business/detail', AuthMiddleware.validateToken, getBusinessBookingDetail);
-Router.get('/coupon', AuthMiddleware.validateToken, allCoupons);
-Router.get('/coupon/byticket', AuthMiddleware.validateToken, allCouponsByTicketId);
+// Public Routes
 Router.get('/ticket', allTickets);
 Router.get('/ticket/detail', ticketDetail);
 
+
+// Customer Role Only Routes
+Router.get('/booking', AuthMiddleware.validateToken, allBookings);
+Router.get('/booking/detail', AuthMiddleware.validateToken, getBookingDetail);
+Router.get('/coupon/byticket', AuthMiddleware.validateToken, allCouponsByTicketId);
+
+Router.post('/booking/create', AuthMiddleware.validateToken, createBooking);
+
+
+// Business Role Only Routes
+Router.get('/booking/business', AuthMiddleware.validateToken, allBusinessBookings);
+Router.get('/booking/business/detail', AuthMiddleware.validateToken, getBusinessBookingDetail);
+Router.get('/coupon', AuthMiddleware.validateToken, allCoupons);
 Router.get('/ticket/mytickets', AuthMiddleware.validateToken, allMyTickets);
 Router.get('/ticket/mytickets/detail', AuthMiddleware.validateToken, myTicketDetail);
 
-Router.post('/booking/create', AuthMiddleware.validateToken, createBooking);
 Router.post('/coupon/create', AuthMiddleware.validateToken, createCoupon);
 
 Router.put('/ticket/create', AuthMiddleware.validateToken, MulterMiddleware.fields([{ name: 'imageData', maxCount: 1 }]), createTicket);

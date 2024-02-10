@@ -1,7 +1,6 @@
 import { useDispatch, connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
@@ -9,14 +8,11 @@ import CouponsCard from './components/CouponsCard';
 import { selectCouponsPageData } from './selectors';
 import CreateNewCoupon from './components/CreateNewCoupons';
 import PopupWindow from '@components/PopupWindow/Dialog';
-
-import classes from './style.module.scss';
-import { selectUserData } from '@containers/Client/selectors';
-import { getUserDataDecrypt } from '@utils/allUtils';
 import { deleteCoupon, getCouponsData } from './actions';
 
-const Coupons = ({ couponDatas, userData }) => {
-    const navigate = useNavigate();
+import classes from './style.module.scss';
+
+const Coupons = ({ couponDatas }) => {
     const dispatch = useDispatch();
 
     const [isOpenCreateCoupon, setIsOpenCreateCoupon] = useState(false);
@@ -34,16 +30,6 @@ const Coupons = ({ couponDatas, userData }) => {
         }));
     };
 
-    useEffect(() => {
-        if(userData) {
-            const user = getUserDataDecrypt(userData);
-
-            if(user && user?.role === 'business') {
-                return;
-            }
-        }
-        navigate('/');
-    }, [userData]);
     useEffect(() => {
         dispatch(getCouponsData());
     }, []);
@@ -74,12 +60,10 @@ const Coupons = ({ couponDatas, userData }) => {
 
 Coupons.propTypes = {
     couponDatas: PropTypes.object,
-    userData: PropTypes.string
 }
 
 const mapStateToProps = createStructuredSelector({
     couponDatas: selectCouponsPageData,
-    userData: selectUserData
 });
 
 export default connect(mapStateToProps)(Coupons);

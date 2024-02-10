@@ -5,16 +5,15 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 
-import { getUserDataDecrypt, numberWithPeriods } from '@utils/allUtils';
+import { numberWithPeriods } from '@utils/allUtils';
 import { selectMyTicketData } from './selectors';
 import { showPopup } from '@containers/App/actions';
-import { selectUserData } from '@containers/Client/selectors';
 import { createNewTicket, deleteTicket, getMyTicketDetail, updateTicket } from './actions';
 import NoImage from '../../static/images/no_image.png';
 
 import classes from './style.module.scss';
 
-const TicketCreation = ({ ticketDetail, userData }) => {
+const TicketCreation = ({ ticketDetail }) => {
     const intl = useIntl();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -113,16 +112,6 @@ const TicketCreation = ({ ticketDetail, userData }) => {
         }
     }, []);
     useEffect(() => {
-        if (userData) {
-            const user = getUserDataDecrypt(userData);
-
-            if (user && user?.role === 'business') {
-                return;
-            }
-        }
-        navigate('/');
-    }, [userData]);
-    useEffect(() => {
         if (ticketDetail && id) {
             const convertObj = {
                 ...ticketDetail,
@@ -196,11 +185,9 @@ const TicketCreation = ({ ticketDetail, userData }) => {
 
 TicketCreation.propTypes = {
     ticketDetail: PropTypes.object,
-    userData: PropTypes.object,
 }
 
 const mapStateToProps = createStructuredSelector({
-    userData: selectUserData,
     ticketDetail: selectMyTicketData
 });
 

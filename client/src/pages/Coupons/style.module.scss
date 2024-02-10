@@ -8,6 +8,7 @@
     @include directionX;
 
     justify-content: end;
+    margin-bottom: 1rem;
 
     .button {
       @include button;

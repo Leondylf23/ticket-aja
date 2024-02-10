@@ -19,6 +19,7 @@ const routes = [
     protected: false,
     component: Home,
     layout: MainLayout,
+    role: '*'
   },
   {
     path: '/login',
@@ -26,6 +27,7 @@ const routes = [
     protected: false,
     component: Login,
     layout: BlankLayout,
+    role: '*'
   },
   {
     path: '/profile',
@@ -33,6 +35,7 @@ const routes = [
     protected: true,
     component: Profile,
     layout: MainLayout,
+    role: '*'
   },
   {
     path: '/register',
@@ -40,6 +43,7 @@ const routes = [
     protected: false,
     component: Register,
     layout: BlankLayout,
+    role: '*'
   },
   {
     path: '/ticket/:id',
@@ -47,6 +51,7 @@ const routes = [
     protected: false,
     component: TicketDetail,
     layout: MainLayout,
+    role: 'customer'
   },
   {
     path: '/ticket/:id/pay',
@@ -54,6 +59,7 @@ const routes = [
     protected: true,
     component: PaymentPage,
     layout: MainLayout,
+    role: 'customer'
   },
   {
     path: '/bookings',
@@ -61,6 +67,7 @@ const routes = [
     protected: true,
     component: Bookings,
     layout: MainLayout,
+    role: '*'
   },
   {
     path: '/ticketcreation',
@@ -68,6 +75,7 @@ const routes = [
     protected: true,
     component: TicketCreation,
     layout: MainLayout,
+    role: 'business'
   },
   {
     path: '/ticketcreation/:id',
@@ -75,6 +83,7 @@ const routes = [
     protected: true,
     component: TicketCreation,
     layout: MainLayout,
+    role: 'business'
   },
   {
     path: '/coupons',
@@ -82,8 +91,9 @@ const routes = [
     protected: true,
     component: Coupons,
     layout: MainLayout,
+    role: 'business'
   },
-  { path: '*', name: 'Not Found', component: NotFound, layout: MainLayout, protected: false },
+  { path: '*', name: 'Not Found', component: NotFound, layout: MainLayout, protected: false, role: '*' },
 ];
 
 export default routes;
