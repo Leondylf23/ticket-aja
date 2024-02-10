@@ -1,4 +1,4 @@
-import { SET_LOCAL, SET_THEME, SET_POPUP, SET_LOADING, SEND_REGISTER_DATA, SEND_LOGIN_DATA } from '@containers/App/constants';
+import { SET_LOCAL, SET_THEME, SET_POPUP, SET_LOADING, SEND_REGISTER_DATA, SEND_LOGIN_DATA, SEND_FORGOT_PASSWORD } from '@containers/App/constants';
 
 export const setLocale = (locale) => ({
   type: SET_LOCAL,
@@ -45,4 +45,11 @@ export const sendLoginData = (formData, cb, errCb) => ({
   formData,
   cb,
   errCb
+});
+
+export const sendForgotPassword = (formData, cb, cbErr) => ({
+  type: SEND_FORGOT_PASSWORD,
+  formData,
+  cb,
+  cbErr
 });

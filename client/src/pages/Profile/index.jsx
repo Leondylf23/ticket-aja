@@ -6,15 +6,14 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 
-import { selectTicketDetail } from '@pages/TicketDetail/selectors';
-
-import classes from './style.module.scss';
 import { selectProfileData } from './selectors';
 import { getProfileData, saveNewPassword, saveProfileData } from './actions';
 import { showPopup } from '@containers/App/actions';
 import { selectUserData } from '@containers/Client/selectors';
 import { decryptDataAES, encryptDataAES } from '@utils/allUtils';
 import { setUserData } from '@containers/Client/actions';
+
+import classes from './style.module.scss';
 
 const ProfilePage = ({ profileData, userDataSelect }) => {
     const dispatch = useDispatch();
@@ -61,6 +60,7 @@ const ProfilePage = ({ profileData, userDataSelect }) => {
             }
 
             setProfileImg(null);
+            dispatch(showPopup(intl.formatMessage({ id: 'profile_title' }), intl.formatMessage({ id: 'profile_generic_save_success' })));
             dispatch(getProfileData());
         }));
     };
@@ -101,45 +101,45 @@ const ProfilePage = ({ profileData, userDataSelect }) => {
 
     return (
         <div className={classes.mainContainer}>
-            <h1 className={classes.title}>Your Profile</h1>
+            <h1 className={classes.title}><FormattedMessage id='profile_title' /></h1>
             <div className={classes.contentContainer}>
                 <div className={classes.leftSide}>
                     <Avatar className={classes.profileImage} src={profileImg ? URL.createObjectURL(profileImg) : profileData?.profileImage} alt='Load image failed!' />
                     {profileImg ?
-                        <button className={classes.button} data-type='red' onClick={() => setProfileImg(null)}>Remove</button>
+                        <button className={classes.button} data-type='red' onClick={() => setProfileImg(null)}><FormattedMessage id='profile_delete_img' /></button>
                         :
                         <>
                             <label htmlFor='profileImageFile' className={classes.button}>
-                                Change Image
+                                <FormattedMessage id='profile_chg_img' />
                             </label>
                             <input type='file' accept='image/*' hidden id='profileImageFile' onChange={setNewProfileImage} />
                         </>
                     }
                     <div className={classes.accountInfoContainer}>
-                        <p>{profileData?.role === 'customer' ? 'Customer' : 'Business'}</p>
+                        <p>{profileData?.role === 'customer' ? intl.formatMessage({ id: 'profile_customer' }) : intl.formatMessage({ id: 'profile_business' })}</p>
                         <p>{profileData?.createdAt}</p>
                     </div>
                 </div>
                 <div className={classes.rigthSide}>
-                    <h3 className={classes.containerTitle}>General</h3>
-                    <label htmlFor='email' className={classes.label}>Email</label>
+                    <h3 className={classes.containerTitle}><FormattedMessage id='profile_general' /></h3>
+                    <label htmlFor='email' className={classes.label}><FormattedMessage id='profile_email' /></label>
                     <input type="email" id='email' disabled className={classes.input} value={userData?.email} />
-                    <label htmlFor='fullname' className={classes.label}>Fullname</label>
+                    <label htmlFor='fullname' className={classes.label}><FormattedMessage id='profile_fullname' /></label>
                     <input type="text" id='fullname' className={classes.input} value={userData?.fullname} onChange={(e) => setUserData(prevVal => ({ ...prevVal, fullname: e.target.value }))} />
-                    <label htmlFor='dob' className={classes.label}>Date of Birth</label>
+                    <label htmlFor='dob' className={classes.label}><FormattedMessage id='profile_dob' /></label>
                     <input type="date" id='dob' className={classes.input} value={userData?.dob} onChange={(e) => setUserData(prevVal => ({ ...prevVal, dob: e.target.value }))} />
                     <div className={classes.buttonConatainer}>
-                        <button className={classes.button} onClick={saveGeneralData}>Save</button>
+                        <button className={classes.button} onClick={saveGeneralData}><FormattedMessage id='profile_save' /></button>
                     </div>
-                    <h3 className={classes.containerTitle}>Passwords</h3>
-                    <label htmlFor='oldPassword' className={classes.label}>Old Password</label>
+                    <h3 className={classes.containerTitle}><FormattedMessage id='profile_passwords' /></h3>
+                    <label htmlFor='oldPassword' className={classes.label}><FormattedMessage id='profile_password_old' /></label>
                     <input type="password" id='oldPassword' className={classes.input} value={userPassword?.oldPass} onChange={(e) => setUserPassword(prevVal => ({ ...prevVal, oldPass: e.target.value }))} />
-                    <label htmlFor='newPassword' className={classes.label}>New Password</label>
+                    <label htmlFor='newPassword' className={classes.label}><FormattedMessage id='profile_password_new' /></label>
                     <input type="password" id='newPassword' className={classes.input} value={userPassword?.newPass} onChange={(e) => setUserPassword(prevVal => ({ ...prevVal, newPass: e.target.value }))} />
-                    <label htmlFor='confirmNewPass' className={classes.label}>Confirm New Pasword</label>
+                    <label htmlFor='confirmNewPass' className={classes.label}><FormattedMessage id='profile_password_confirm' /></label>
                     <input type="password" id='confirmNewPass' className={classes.input} value={userPassword?.confirmPass} onChange={(e) => setUserPassword(prevVal => ({ ...prevVal, confirmPass: e.target.value }))} />
                     <div className={classes.buttonConatainer}>
-                        <button className={classes.button} onClick={saveNewPasswordData}>Save</button>
+                        <button className={classes.button} onClick={saveNewPasswordData}><FormattedMessage id='profile_save' /></button>
                     </div>
                 </div>
             </div>

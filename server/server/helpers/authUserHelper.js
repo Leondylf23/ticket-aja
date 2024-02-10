@@ -142,7 +142,7 @@ const resetPassword = async (dataObject) => {
 
         return Promise.resolve({
             message: 'Password has been reset, please use new password!',
-            newPassword: randomString
+            newPassword: encryptData(randomString)
         });
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));

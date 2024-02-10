@@ -26,18 +26,21 @@ const BookingDetailComponent = ({ id, bookingData, back, isBusiness }) => {
                 setStatus({
                     text: <FormattedMessage id='status_waiting' />,
                     color: 'yellow',
+                    status: statusData
                 });
                 break;
             case 'FAILED':
                 setStatus({
                     text: <FormattedMessage id='status_failed' />,
                     color: 'red',
+                    status: statusData
                 });
                 break;
             case 'BOOKED':
                 setStatus({
                     text: <FormattedMessage id='status_success' />,
                     color: 'green',
+                    status: statusData
                 });
                 break;
         }
@@ -97,10 +100,27 @@ const BookingDetailComponent = ({ id, bookingData, back, isBusiness }) => {
                         </div>
                     </div>
                     <div className={classes.statusContainer} data-item={status?.color}>{status?.text}</div>
-                    {(isBusiness && bookingData?.status === 'WAITING') && <div className={classes.statusBtnContainer}>
+                    {(isBusiness && status?.status === 'WAITING') && <div className={classes.statusBtnContainer}>
                         <button className={classes.button} onClick={() => updateStatusBtn(true)}><FormattedMessage id='bookings_update_status_complete' /></button>
                         <button className={classes.button} data-type='red' onClick={() => updateStatusBtn(false)}><FormattedMessage id='bookings_update_status_failed' /></button>
                     </div>}
+                    <div className={classes.couponsContainer}>
+                        <h3 className={classes.title}><FormattedMessage id='ticket_detail_used_coupons' /></h3>
+                        <div className={classes.dataContainer}>
+                            {bookingData?.coupons?.length > 0 ?
+                                bookingData?.coupons?.map(coupon =>
+                                    <div className={classes.data}>
+                                        <a className={classes.name}>{coupon?.couponName}</a>
+                                        <b className={classes.price}>Rp. {numberWithPeriods(coupon?.couponPrcCut)}</b>
+                                    </div>
+                                )
+                                :
+                                <div className={classes.emptyContainer}>
+                                    <h4 className={classes.text}><FormattedMessage id='empty_data' /></h4>
+                                </div>
+                            }
+                        </div>
+                    </div>
                     <h3 className={classes.descriptionTitle}><FormattedMessage id='ticket_detail_desc' /></h3>
                     <p className={classes.description}>{bookingData?.description}</p>
                 </div>
@@ -112,7 +132,7 @@ const BookingDetailComponent = ({ id, bookingData, back, isBusiness }) => {
 BookingDetailComponent.propTypes = {
     id: PropTypes.string,
     bookingData: PropTypes.object,
-    back: PropTypes.func, 
+    back: PropTypes.func,
     isBusiness: PropTypes.bool
 };
 

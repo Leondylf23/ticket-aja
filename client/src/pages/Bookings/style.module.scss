@@ -214,6 +214,45 @@
           @include button;
         }
       }
+      .couponsContainer {
+        @include directionY;
+
+        width: 100%;
+        
+        .dataContainer {
+          @include directionX;
+          @include padding(1rem);
+
+          overflow-x: auto;
+          gap: 0.5rem;
+
+          .data {
+            @include directionY;
+            @include padding(0.5rem);
+            @include shadow;
+
+            flex-shrink: 0;
+            width: auto;
+            max-width: 200px;
+            background-color: var(--color-bg);
+            border-radius: 10px;
+  
+            .name {
+              width: 100%;
+            }
+            .price {
+              width: 100%;
+            }
+          }
+          .emptyContainer {
+            @include containerCenter;
+  
+            width: 100%;
+            height: 80px;
+          }
+        }
+
+      }
       .descriptionTitle {
         margin-bottom: 0.5rem;
       }

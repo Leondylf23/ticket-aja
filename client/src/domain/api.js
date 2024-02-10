@@ -68,3 +68,4 @@ export const updateBookingStatusApi = (formData) => callAPI(`${urls.booking}/sta
 export const getUserProfileData = () => callAPI(urls.profile, 'get');
 export const saveProfileDataApi = (formData) => callAPI(`${urls.profile}/update`, 'patch', { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } , {}, formData);
 export const changePasswordApi = (formData) => callAPI(`${urls.changepassword}`, 'patch', {} , {}, formData);
+export const resetPasswordApi = (formData) => callAPI(`${urls.resetpassword}`, 'post', {} , {}, formData);

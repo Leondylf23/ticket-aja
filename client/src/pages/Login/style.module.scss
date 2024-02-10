@@ -46,6 +46,36 @@
         margin-bottom: 10px;
       }
 
+      .forgotPasswordContainer {
+        @include directionX;
+
+        justify-content: end;
+        width: 100%;
+
+        .text {
+          margin-bottom: 0.5rem;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .newPassContainer {
+        @include directionY;
+
+        align-items: center;
+
+        .title {
+          font-size: 0.8rem;
+          margin-bottom: 0.5rem;
+        }
+        .content {
+          font-size: 1.2rem;
+        }
+      }
+
       .button {
         @include button;
 
@@ -62,6 +92,14 @@
         .footerLink {
           text-decoration: underline;
           cursor: pointer;
+        }
+      }
+      .forgotPassFooter {
+        margin-top: 0.5rem;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
         }
       }
     }

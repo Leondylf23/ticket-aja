@@ -58,6 +58,18 @@ const getBookingDetailWithId = async (dataObject) => {
                         },
                     ]
                 },
+                {
+                    association: 'couponConnectors',
+                    required: false,
+                    attributes: ['id'],
+                    include: [
+                        {
+                            association: 'coupon',
+                            required: true,
+                            attributes: ['couponName', 'couponPrcCut'],
+                        },
+                    ]
+                },
             ],
             attributes: ['bookingCode', 'status', 'variant', 'paymentMethod'],
             where: { id, isActive: true },
@@ -69,7 +81,9 @@ const getBookingDetailWithId = async (dataObject) => {
             ...data?.dataValues,
             ...data?.ticket?.dataValues,
             organization: data?.ticket?.user?.dataValues?.fullname,
-            ticket: undefined
+            coupons: data?.couponConnectors?.map(couponData => couponData?.dataValues?.coupon?.dataValues),
+            ticket: undefined,
+            couponConnectors: undefined
         }
 
         return Promise.resolve(remapData);

@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 
 import { getUserDataDecrypt, numberWithPeriods } from '@utils/allUtils';
 import { selectMyTicketData } from './selectors';
-
-import classes from './style.module.scss';
 import { showPopup } from '@containers/App/actions';
 import { selectUserData } from '@containers/Client/selectors';
 import { createNewTicket, deleteTicket, getMyTicketDetail, updateTicket } from './actions';
+import NoImage from '../../static/images/no_image.png';
+
+import classes from './style.module.scss';
 
 const TicketCreation = ({ ticketDetail, userData }) => {
     const intl = useIntl();
@@ -135,7 +136,7 @@ const TicketCreation = ({ ticketDetail, userData }) => {
         <div className={classes.mainContainer}>
             <div className={classes.topContentContainer}>
                 <div className={classes.leftContent}>
-                    <img className={classes.image} src={imageData ? URL.createObjectURL(imageData) : (formData?.imageUrl ?? 'https://d2kwwar9pcd0an.cloudfront.net/8823600fdfa118bad6245f3f56852341.jpeg')} alt="Img failed!" />
+                    <img className={classes.image} src={imageData ? URL.createObjectURL(imageData) : (formData?.imageUrl ?? NoImage)} alt="Img failed!" />
                     <div className={classes.contentDetails}>
                         {imageData ?
                             <button className={classes.deleteBtn} data-type='red' onClick={() => removeImage()}><FormattedMessage id='ticket_creation_rmv_img_btn' /></button>
