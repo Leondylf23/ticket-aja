@@ -71,7 +71,7 @@ const bookingDataFormValidation = (data) => {
     ticketId: Joi.number().required().description('Ticket id is required!'), 
     variant: Joi.object({
       variantName: Joi.string().required().description('Variant name is required!'),
-      price: Joi.number().required().description('Price is required!')
+      price: Joi.number().min(5000).max(5000000).required().description('Price is required!')
     }).required().description('Variant is required!'), 
     paymentMethod: Joi.string().required().description('Payment method is required!'), 
     totalPayment: Joi.number().required().description('Total payment is required!'), 

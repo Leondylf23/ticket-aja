@@ -9,7 +9,10 @@ const urls = {
   register: 'auth/register',
   ticket: 'ticket/ticket',
   coupons: 'ticket/coupon',
-  booking: 'ticket/booking'
+  booking: 'ticket/booking',
+  profile: 'auth/profile',
+  resetpassword: 'auth/resetpassword',
+  changepassword: 'auth/changepassword',
 };
 
 export const callAPI = async (endpoint, method, header = {}, params = {}, data = {}) => {
@@ -60,3 +63,8 @@ export const getAllBusinessBookingsApi = () => callAPI(`${urls.booking}/business
 export const getBusinessBookingDetailApi = (formData) => callAPI(`${urls.booking}/business/detail`, 'get', {}, formData);
 export const createBookingApi = (formData) => callAPI(`${urls.booking}/create`, 'post', {}, {}, formData);
 export const updateBookingStatusApi = (formData) => callAPI(`${urls.booking}/status/update`, 'patch', {}, {}, formData);
+
+// User
+export const getUserProfileData = () => callAPI(urls.profile, 'get');
+export const saveProfileDataApi = (formData) => callAPI(`${urls.profile}/update`, 'patch', { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' } , {}, formData);
+export const changePasswordApi = (formData) => callAPI(`${urls.changepassword}`, 'patch', {} , {}, formData);

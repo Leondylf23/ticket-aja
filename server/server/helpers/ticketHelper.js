@@ -184,7 +184,7 @@ const getAllCouponsByTicketId = async (dataObject, userId) => {
                         {
                             association: 'couponConnectors',
                             required: false,
-                            where: { isActive: false, createdBy: userId },
+                            where: { isActive: true, createdBy: userId },
                         }
                     ]
                 },
@@ -195,11 +195,15 @@ const getAllCouponsByTicketId = async (dataObject, userId) => {
             },
         });
 
-        const couponList = data?.coupons?.map(coupon => ({
+        let couponList = data?.coupons?.map(coupon => ({
             ...coupon?.dataValues,
-            couponConnectors: undefined,
             priceCut: encryptData(coupon?.dataValues?.priceCut)
         }));
+        couponList = couponList.filter(coupon => coupon?.couponConnectors?.length === 0);
+        couponList.map(coupon => ({
+            ...coupon,
+            couponConnector: undefined
+        }))
 
         return Promise.resolve(couponList);
     } catch (err) {
@@ -261,7 +265,7 @@ const addBooking = async (dataObject, userId) => {
             for (let index = 0; index < coupons.length; index++) {
                 const coupon = coupons[index];
 
-                const createdTickets = await db.couponConnector.create({bookingId, couponId: coupon, createdBy: userId});
+                const createdTickets = await db.couponConnector.create({bookingId, couponId: coupon, createdBy: userId, ticketId});
                 if(!createdTickets?.id) throw new Error('Connector not created!');
             }
 

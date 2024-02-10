@@ -82,6 +82,8 @@ export default {
   ticket_creation_location_validation: 'Location must be more than 5 characters and less equal than 255 characters!',
   ticket_creation_description_validation: 'Description must be more than 5 characters and less equal than 255 characters!',
   ticket_creation_variant_validation: 'At least have 1 variant!',
+  ticket_creation_variant_empty_validation: 'Must fill all!',
+  ticket_creation_variant_price_validation: 'Price must be more than 5,000 and less than 5,000,000!',
   ticket_creation_image_validation: 'At least have an image!',
   ticket_creation_save_success: 'Saved!',
 
@@ -120,5 +122,6 @@ export default {
   coupons_price_cut: 'Price Cut (Rp.)',
   coupons_create: 'Create',
   coupons_name_validation: 'Name must be 5 characters minimum and 255 characters maximum!',
-  coupons_price_cut_validation: 'Price cut must be Rp. 5.000 minimum and Rp. 200.000 maximum!'
+  coupons_price_cut_validation: 'Price cut must be Rp. 5,000 minimum and Rp. 200,000 maximum!',
+  
 };

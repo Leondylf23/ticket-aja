@@ -11,6 +11,7 @@ import languageReducer from '@containers/Language/reducer';
 import { mapWithPersistor } from './persistence';
 import couponsReducer from '@pages/Coupons/reducer';
 import homeReducer from '@pages/Home/reducer';
+import profileReducer from '@pages/Profile/reducer';
 
 const storedReducers = {
   app: { reducer: appReducer, whitelist: storedAppState },
@@ -24,7 +25,8 @@ const temporaryReducers = {
   bookings: bookingsReducer,
   ticketCreation: ticketCreationReducer,
   coupons: couponsReducer,
-  home: homeReducer
+  home: homeReducer,
+  profile: profileReducer
 };
 
 const createReducer = () => {

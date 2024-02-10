@@ -68,7 +68,8 @@ const PaymentPage = ({ inputtedData, productId, productDetail }) => {
             ...inputtedData,
             ticketId: productId,
             paymentMethod: inputtedData?.paymentMethod?.id,
-            coupons: inputtedData?.coupons?.map(coupon => coupon?.id)
+            coupons: inputtedData?.coupons?.map(coupon => coupon?.id),
+            index: undefined
         }));
 
         dispatch(sendBookingData({data: encryptedData}, () => {

@@ -4,6 +4,7 @@ const ValidationAuthUser = require('../helpers/validationAuthUser');
 const AuthUserHelper = require('../helpers/authUserHelper');
 const GeneralHelper = require('../helpers/generalHelper');
 const AuthMiddleware = require('../middlewares/authMiddleware');
+const MulterMiddleware = require('../middlewares/multerMiddleware');
 const { decryptData } = require('../helpers/utilsHelper');
 
 const fileName = 'server/api/authUser.js';
@@ -72,10 +73,13 @@ const register = async (request, reply) => {
 
 const changePassword = async (request, reply) => {
     try {
-        ValidationAuthUser.changePasswordFormValidation(request.body);
+        const formData = {
+            ...(request?.body?.oldPassword && {oldPassword: decryptData(request?.body?.oldPassword)}),
+            ...(request?.body?.newPassword && {newPassword: decryptData(request?.body?.newPassword)})
+        };
+        ValidationAuthUser.changePasswordFormValidation(formData);
 
         const userData = GeneralHelper.getUserData(request);
-        const formData = request.body;
         const response = await AuthUserHelper.changePassword(formData, userData.userId);
 
         return reply.send({
@@ -111,7 +115,8 @@ const updateProfile = async (request, reply) => {
 
         const userData = GeneralHelper.getUserData(request);
         const formData = request.body;
-        const response = await AuthUserHelper.updateProfile(formData, userData.userId);
+        const imageFile = request?.files?.imageData;
+        const response = await AuthUserHelper.updateProfile(formData, imageFile ? imageFile[0] : null, userData.userId);
 
         return reply.send({
             message: 'success',
@@ -130,6 +135,6 @@ Router.post('/register', register);
 Router.post('/resetpassword', resetPassword);
 
 Router.patch('/changepassword', AuthMiddleware.validateToken, changePassword);
-Router.patch('/profile/update', AuthMiddleware.validateToken, updateProfile);
+Router.patch('/profile/update', MulterMiddleware.fields([{ name: 'imageData', maxCount: 1 }]), AuthMiddleware.validateToken, updateProfile);
 
 module.exports = Router;

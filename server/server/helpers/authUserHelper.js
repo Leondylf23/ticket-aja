@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
 const { encryptData, generateRandomString } = require('./utilsHelper');
+const { uploadToCloudinary } = require('../services/cloudinary');
 
 const passwordSaltRound = bcrypt.genSaltSync(12);
 const signatureSecretKey = process.env.SIGN_SECRET_KEY || 'pgJApn9pJ8';
@@ -83,12 +84,19 @@ const registerUser = async (dataObject) => {
 
 const getUserProfile = async (userId) => {
     try {
-        const data = await db.user.findByPk(userId);
+        const data = await db.user.findOne({
+            attributes: ['email', 'fullname', 'profileImage', 'dob', 'role', 'createdAt'],
+            where: {id: userId}
+        });
 
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
         
         const dataValue = data?.dataValues;
-        const filteredData = {...dataValue, password: undefined}
+        const filteredData = {
+            ...dataValue, 
+            createdAt: dataValue?.createdAt?.toISOString().slice(0, 10).replace('-', '/').replace('-', '/'),
+            dob: dataValue?.dob?.toISOString().slice(0, 10)
+        }
 
         return Promise.resolve(filteredData);
     } catch (err) {
@@ -141,7 +149,7 @@ const resetPassword = async (dataObject) => {
     }
 };
 
-const updateProfile = async (dataObject, userId) => {
+const updateProfile = async (dataObject, imageFile, userId) => {
     const { fullname, dob } = dataObject;
 
     try {
@@ -149,10 +157,13 @@ const updateProfile = async (dataObject, userId) => {
 
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
 
-        const checkUpdate = await data.update({ fullname, dob });
+        let imageResult = null;
+        if (imageFile) imageResult = await uploadToCloudinary(imageFile, 'image');
+
+        const checkUpdate = await data.update({ fullname, dob, ...(imageResult && { profileImage: imageResult?.url }) });
         if(_.isEmpty(checkUpdate)) throw Boom.internal('Profile not updated!');
 
-        return Promise.resolve({message: 'Profile updated!'});
+        return Promise.resolve({message: 'Profile updated!', ...(imageResult && {imageUpdate: imageResult?.url})});
     } catch (err) {
         return Promise.reject(GeneralHelper.errorResponse(err));
     }

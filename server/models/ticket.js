@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.booking, {
         foreignKey: 'ticketId',
       });
+
+      this.hasMany(models.couponConnector, {
+        foreignKey: 'ticketId',
+      });
     }
   }
   ticket.init({

@@ -36,7 +36,11 @@ const TicketCreation = ({ ticketDetail, userData }) => {
 
     const addNewVariant = () => {
         if (variantInput?.variantName === '' || variantInput?.price === 0) {
-            dispatch(showPopup('Ticket Creation', 'Harus isi semua data terlebih dahulu!'));
+            dispatch(showPopup(intl.formatMessage({ id: 'ticket_creation_title' }), intl.formatMessage({ id: 'ticket_creation_variant_empty_validation' })));
+            return;
+        }
+        if (variantInput?.price < 5000 || variantInput?.price > 5000000) {
+            dispatch(showPopup(intl.formatMessage({ id: 'ticket_creation_title' }), intl.formatMessage({ id: 'ticket_creation_variant_price_validation' })));
             return;
         }
 

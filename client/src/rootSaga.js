@@ -7,6 +7,7 @@ import bookingsSaga from '@pages/Bookings/saga';
 import ticketCreationSaga from '@pages/TicketCreation/saga';
 import couponsSaga from '@pages/Coupons/saga';
 import homeSaga from '@pages/Home/saga';
+import profileSaga from '@pages/Profile/saga';
 
 export default function* rootSaga() {
   yield all([
@@ -16,6 +17,7 @@ export default function* rootSaga() {
     bookingsSaga(),
     ticketCreationSaga(),
     couponsSaga(),
-    homeSaga()
+    homeSaga(),
+    profileSaga()
   ]);
 }

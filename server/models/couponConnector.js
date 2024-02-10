@@ -20,12 +20,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'bookingId',
         onDelete: "CASCADE"
       });
+
+      this.belongsTo(models.ticket, {
+        foreignKey: 'ticketId',
+        onDelete: "CASCADE"
+      });
     }
   }
   couponConnector.init({
     couponId: DataTypes.INTEGER,
     bookingId: DataTypes.INTEGER,
     createdBy: DataTypes.INTEGER,
+    ticketId: DataTypes.INTEGER,
     isActive: DataTypes.BOOLEAN
   }, {
     sequelize,

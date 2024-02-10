@@ -17,6 +17,7 @@ const ProductDetailComponent = ({ ticketData, inputtedData }) => {
     const dispatch = useDispatch();
 
     const [selectedVariant, setSelectedVariant] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
     const [variants, setVariants] = useState([]);
 
     const setVariantData = (data) => {
@@ -29,10 +30,11 @@ const ProductDetailComponent = ({ ticketData, inputtedData }) => {
         }
         if (inputtedData?.variant) {
             setSelectedVariant(inputtedData?.variant);
+            setSelectedIndex(inputtedData?.index)
         }
     }, []);
     useEffect(() => {
-        dispatch(setUserInputs({ ...inputtedData, variant: selectedVariant, totalPayment: selectedVariant?.price }));
+        dispatch(setUserInputs({ ...inputtedData, variant: selectedVariant, index: selectedIndex, totalPayment: selectedVariant?.price }));
     }, [selectedVariant]);
 
     return (
@@ -40,8 +42,8 @@ const ProductDetailComponent = ({ ticketData, inputtedData }) => {
             <h2 className={classes.title}>{ticketData?.title}</h2>
             <h4 className={classes.pageTitle}><FormattedMessage id='payment_prct_detail_page_title' /></h4>
             <div className={classes.variantContainer}>
-                {variants.map(variant =>
-                    <div className={classes.variant} key={variant?.variantName} onClick={() => setVariantData(variant)} data-active={variant === selectedVariant}>
+                {variants.map((variant, index) =>
+                    <div className={classes.variant} key={variant?.variantName} onClick={() => {setVariantData(variant); setSelectedIndex(index)}} data-active={index === selectedIndex}>
                         <a>{variant?.variantName}</a>
                     </div>
                 )}

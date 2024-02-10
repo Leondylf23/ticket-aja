@@ -82,6 +82,8 @@ export default {
   ticket_creation_location_validation: 'Lokasi harus lebih dari 2 karakter dan kurang sama dengan 255 karakter!',
   ticket_creation_description_validation: 'Deskripsi harus lebih dari 5 karakter dan kurang sama dengan 500 karakter!',
   ticket_creation_variant_validation: 'Setidaknya memiliki 1 varian!',
+  ticket_creation_variant_empty_validation: 'Harus diisi semua!',
+  ticket_creation_variant_price_validation: 'Harga harus lebih dari 5.000 dan kurang dari 5.000.000!',
   ticket_creation_image_validation: 'Setidaknya memiliki gambar!',
   ticket_creation_save_success: 'Berhasil disimpan!',
 
@@ -120,5 +122,12 @@ export default {
   coupons_price_cut: 'Potongan Harga (Rp.)',
   coupons_create: 'Buat',
   coupons_name_validation: 'Nama harus minimal 5 karakter dan maksimal 255 karakter!',
-  coupons_price_cut_validation: 'Pemotongan harga harus minimal Rp. 5.000 dan maksimal Rp. 200.000!'
+  coupons_price_cut_validation: 'Pemotongan harga harus minimal Rp. 5.000 dan maksimal Rp. 200.000!',
+
+  profile_title: 'Profile Anda',
+
+  profile_password_fill_all: 'Harus diisi semua!',
+  profile_password_same_pass: 'Password baru dan konfirmasi password harus sama!',
+  profile_password_old_pass_not_match: 'Password lama salah!',
+  profile_password_success: 'Password sudah berhasil diganti!',
 };

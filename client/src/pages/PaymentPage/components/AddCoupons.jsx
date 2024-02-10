@@ -10,7 +10,7 @@ import { numberWithPeriods } from '@utils/allUtils';
 import { selectCouponsData, selectProductId, selectUserInputData } from '../selectors';
 
 import classes from '../style.module.scss';
-import { getCouponsData, setUserInputs } from '../actions';
+import { getCouponsData, setCouponsData, setUserInputs } from '../actions';
 import { showPopup } from '@containers/App/actions';
 
 const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
@@ -53,6 +53,7 @@ const AddCouponsComponent = ({ inputtedData, couponsData, productId }) => {
         dispatch(setUserInputs({...inputtedData, coupons: selectedCoupons, totalPayment}));
     }, [selectedCoupons]);
     useEffect(() => {
+        dispatch(setCouponsData([]));
         dispatch(getCouponsData({id: productId}));
         const basePriceData = inputtedData?.variant?.price;
 
