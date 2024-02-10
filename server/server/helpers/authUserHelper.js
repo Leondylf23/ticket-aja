@@ -10,7 +10,7 @@ const { uploadToCloudinary } = require('../services/cloudinary');
 
 const passwordSaltRound = bcrypt.genSaltSync(12);
 const signatureSecretKey = process.env.SIGN_SECRET_KEY || 'pgJApn9pJ8';
-const sessionAge = process.env.SESSION_AGE || '12h';
+const sessionAge = process.env.SESSION_AGE || '365d';
 
 // PRIVATE FUNCTIONS
 const __generateHashPassword = (password) => {
@@ -94,8 +94,8 @@ const getUserProfile = async (userId) => {
         const dataValue = data?.dataValues;
         const filteredData = {
             ...dataValue, 
-            createdAt: dataValue?.createdAt?.toISOString().slice(0, 10).replace('-', '/').replace('-', '/'),
-            dob: dataValue?.dob?.toISOString().slice(0, 10)
+            createdAt: new Date(dataValue?.createdAt)?.toISOString().slice(0, 10).replace('-', '/').replace('-', '/'),
+            dob: new Date(dataValue?.dob)?.toISOString().slice(0, 10)
         }
 
         return Promise.resolve(filteredData);

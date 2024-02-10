@@ -210,16 +210,16 @@ const getAllCouponsByTicketId = async (dataObject, userId) => {
                 id
             },
         });
-
+        
         let couponList = data?.coupons?.map(coupon => ({
             ...coupon?.dataValues,
             priceCut: encryptData(coupon?.dataValues?.priceCut)
-        }));
-        couponList = couponList.filter(coupon => coupon?.couponConnectors?.length === 0);
-        couponList.map(coupon => ({
+        })) ?? [];
+        couponList = couponList?.filter(coupon => coupon?.couponConnectors?.length === 0);
+        couponList?.map(coupon => ({
             ...coupon,
             couponConnector: undefined
-        }))
+        }));
 
         return Promise.resolve(couponList);
     } catch (err) {
