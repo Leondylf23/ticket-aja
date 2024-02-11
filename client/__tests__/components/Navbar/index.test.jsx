@@ -4,6 +4,7 @@ import Navbar from '@components/Navbar';
 
 jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
+  connect: jest.fn(),
 }));
 
 jest.mock('react-router-dom', () => ({

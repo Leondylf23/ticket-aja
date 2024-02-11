@@ -5,10 +5,9 @@ import { Dialog } from '@mui/material';
 
 import classes from './style.module.scss';
 
-// eslint-disable-next-line arrow-body-style
 const PopupMessage = ({ open, title, message, onClose }) => {
   return (
-    <Dialog open={open} onClose={onClose} PaperProps={{ className: classes.dialogWrapper }}>
+    <Dialog open={open} onClose={onClose} PaperProps={{ className: classes.dialogWrapper }} data-testid='popup-message'>
       <div className={classes.title}>
         <FormattedMessage id={title || 'app_popup_error_title'} />
       </div>
