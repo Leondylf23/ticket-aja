@@ -15,8 +15,6 @@ const fileName = 'server/api/ticket.js';
 // ROUTE FUNCTIONS
 const allBookings = async (request, reply) => {
     try {
-        ValidationTicket.allBookingValidation(request.query);
-
         const userData = GeneralHelper.getUserData(request);
         if (!(userData?.role === 'customer')) throw Boom.unauthorized('User role not allowed!');
 
@@ -54,8 +52,6 @@ const getBookingDetail = async (request, reply) => {
 
 const allBusinessBookings = async (request, reply) => {
     try {
-        ValidationTicket.allBookingValidation(request.query);
-
         const userData = GeneralHelper.getUserData(request);
         if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
 
@@ -131,10 +127,7 @@ const allCouponsByTicketId = async (request, reply) => {
 
 const allTickets = async (request, reply) => {
     try {
-        ValidationTicket.allTicketsValidation(request.query);
-
-        const formData = request.query;
-        const response = await TicketHelper.getAllTickets(formData);
+        const response = await TicketHelper.getAllTickets();
 
         return reply.send({
             message: 'success',
@@ -165,13 +158,11 @@ const ticketDetail = async (request, reply) => {
 
 const allMyTickets = async (request, reply) => {
     try {
-        ValidationTicket.allTicketsValidation(request.query);
-
         const userData = GeneralHelper.getUserData(request);
         if (!(userData?.role === 'business')) throw Boom.unauthorized('User role not allowed!');
 
         const formData = request.query;
-        const response = await TicketHelper.getAllTickets(formData, userData?.role === 'business' ? userData?.userId : null);
+        const response = await TicketHelper.getAllTickets(userData?.userId);
 
         return reply.send({
             message: 'success',
@@ -238,7 +229,6 @@ const createBooking = async (request, reply) => {
         let decryptData = null;
         try {
             decryptData = {...JSON.parse(UtilsHelper.decryptData(formData?.data))}
-            if(!decryptData) throw new Error('Data is null');
         } catch (error) {
             throw Boom.badRequest('Data decryption failed!');
         }
@@ -287,7 +277,7 @@ const editTicket = async (request, reply) => {
         const imageFile = request?.files?.imageData;
 
         const formData = request.body;
-        const response = await TicketHelper.editTicketData({...formData, imageData: Array.isArray(imageFile) ? imageFile[0] : null}, userData?.userId);
+        const response = await TicketHelper.editTicketData({...formData, imageData: imageFile ? imageFile[0] : null}, userData?.userId);
 
         return reply.send({
             message: "success",

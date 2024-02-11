@@ -1,12 +1,14 @@
 {
-  "bookingCode": "TRX/2024-02-09/s3fXd",
-  "status": "WAITING",
-  "variant": {
-    "price": "10000000",
-    "variantName": "varian 1"
+  "dataValues": {
+    "bookingCode": "TRX/2024-02-09/s3fXd",
+    "status": "WAITING",
+    "variant": {
+      "price": "10000000",
+      "variantName": "varian 1"
+    },
+    "paymentMethod": "METHOD_ONSITE_PAY",
+    "businessUserId": 1
   },
-  "paymentMethod": "METHOD_ONSITE_PAY",
-  "businessUserId": 1,
   "ticket": {
     "dataValues": {
       "title": "bikin baru edit 7",

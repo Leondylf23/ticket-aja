@@ -350,16 +350,20 @@ describe('User Json', () => {
 
             mockUser = { dataValues: _.cloneDeep(MockUser), update: jest.fn() };
 
+            uploadCloudinary = jest.spyOn(cloudinary, 'uploadToCloudinary');
             getUser = jest.spyOn(db.user, 'findOne');
             updateUser = jest.spyOn(mockUser, 'update');
+        });
+
+        afterAll(() => {
+            jest.clearAllMocks();
         });
 
         test('Should Return 200: Successfully Change Profile Data', async () => {
             getUser.mockResolvedValue(mockUser);
             updateUser.mockResolvedValue(mockUser);
 
-            uploadCloudinary = jest.spyOn(cloudinary, 'uploadToCloudinary');
-            uploadCloudinary.mockResolvedValue({url: 'this is url'});
+            uploadCloudinary.mockResolvedValue({ url: 'this is url' });
 
             const filePath = './__test__/fixtures/file/en.png';
 
@@ -384,6 +388,26 @@ describe('User Json', () => {
                 .set('Authorization', bearerToken)
                 .field('fullname', body?.fullname)
                 .field('dob', body?.dob)
+                .expect(500)
+                .then(res => {
+                    expect(res.body).toBeTruthy();
+                })
+        });
+
+        test('Should Return 500: Change Profile Data Image Not Uploaded', async () => {
+            getUser.mockResolvedValue(mockUser);
+            updateUser.mockResolvedValue(mockUser);
+
+            uploadCloudinary.mockResolvedValue(null);
+
+            const filePath = './__test__/fixtures/file/en.png';
+
+            await Request(server)
+                .patch(apiUrl)
+                .set('Authorization', bearerToken)
+                .field('fullname', body?.fullname)
+                .field('dob', body?.dob)
+                .attach('imageData', filePath)
                 .expect(500)
                 .then(res => {
                     expect(res.body).toBeTruthy();

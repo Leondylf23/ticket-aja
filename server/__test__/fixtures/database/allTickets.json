@@ -1,11 +1,13 @@
 [
   {
-    "id": 1,
-    "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507234/image/coigg6daa57si1smqema.jpg",
-    "location": "aaaaaa",
-    "title": "bikin baru edit 7",
-    "price": "10000000.00",
-    "variants": "[{\"variantName\":\"varian 1\",\"price\":\"10000000\"},{\"variantName\":\"varian 2\",\"price\":\"120000000\"},{\"variantName\":\"varian 3\",\"price\":\"600000000\"}]",
+    "dataValues": {
+      "id": 1,
+      "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507234/image/coigg6daa57si1smqema.jpg",
+      "location": "aaaaaa",
+      "title": "bikin baru edit 7",
+      "price": "10000000.00",
+      "variants": "[{\"variantName\":\"varian 1\",\"price\":\"10000000\"},{\"variantName\":\"varian 2\",\"price\":\"120000000\"},{\"variantName\":\"varian 3\",\"price\":\"600000000\"}]"
+    },
     "user": {
       "dataValues": {
         "organization": "test edit name"
@@ -13,60 +15,17 @@
     }
   },
   {
-    "id": 2,
-    "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507294/image/cmri23yzcdfennvhi5e2.jpg",
-    "location": "wdadwadad",
-    "title": "tiket 2",
-    "price": "10000.00",
-    "variants": "[{\"variantName\":\"fffff\",\"price\":\"10000\"},{\"variantName\":\"asdwdwadw\",\"price\":\"1000000\"}]",
+    "dataValues": {
+      "id": 2,
+      "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507294/image/cmri23yzcdfennvhi5e2.jpg",
+      "location": "wdadwadad",
+      "title": "tiket 2",
+      "price": "10000.00",
+      "variants": "[{\"variantName\":\"fffff\",\"price\":\"10000\"},{\"variantName\":\"asdwdwadw\",\"price\":\"1000000\"}]"
+    },
     "user": {
       "dataValues": {
         "organization": "test edit name"
-      }
-    }
-  },
-  {
-    "id": 5,
-    "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707577991/image/e99otyscdzxuphkbnzoa.jpg",
-    "location": "Test Location",
-    "title": "Test create",
-    "price": "10000.00",
-    "variants": "[{\"variantName\":\"test variant 1\",\"price\":\"10000\"},{\"variantName\":\"test variant 2\",\"price\":\"100000\"}]",
-    "user": {
-      "dataValues": {
-        "organization": "test edit name"
-      },
-      "_previousDataValues": {
-        "organization": "test edit name"
-      }
-    }
-  },
-  {
-    "id": 3,
-    "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507467/image/crxxrtsj7p6yv2xrjczt.gif",
-    "location": "adwadwdwdadwa",
-    "title": "ini dri business 2",
-    "price": "18978978.00",
-    "variants": "[{\"variantName\":\"2312easd a\",\"price\":\"18978978\"},{\"variantName\":\"asdad\",\"price\":\"1231\"}]",
-    "user": {
-      "dataValues": {
-        "organization": "business 2"
-      },
-      "_previousDataValues": {
-        "organization": "business 2"
-      }
-    }
-  },
-  {
-    "id": 4,
-    "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707523590/image/ui6jvxxpa1fvcoulwpft.jpg",
-    "location": "adwwwd",
-    "title": "ticket baru",
-    "price": "500000.00",
-    "variants": "[{\"variantName\":\"wadwadwa\",\"price\":\"500000\"}]",
-    "user": {
-      "dataValues": {
-        "organization": "business 2"
       }
     }
   }

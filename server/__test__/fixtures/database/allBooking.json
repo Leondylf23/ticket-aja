@@ -1,11 +1,13 @@
 [
   {
-    "id": 15,
-    "bookingCode": "TRX/2024-02-09/NhTxt",
-    "status": "FAILED",
-    "variant": {
-      "price": "1000000",
-      "variantName": "asdwdwadw"
+    "dataValues": {
+      "id": 15,
+      "bookingCode": "TRX/2024-02-09/NhTxt",
+      "status": "FAILED",
+      "variant": {
+        "price": "1000000",
+        "variantName": "asdwdwadw"
+      }
     },
     "ticket": {
       "dataValues": {
@@ -15,47 +17,19 @@
     }
   },
   {
-    "id": 16,
-    "bookingCode": "TRX/2024-02-09/t1Fez",
-    "status": "BOOKED",
-    "variant": {
-      "price": "10000",
-      "variantName": "fffff"
+    "dataValues": {
+      "id": 16,
+      "bookingCode": "TRX/2024-02-09/t1Fez",
+      "status": "BOOKED",
+      "variant": {
+        "price": "10000",
+        "variantName": "fffff"
+      }
     },
     "ticket": {
       "dataValues": {
         "title": "tiket 2",
         "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507294/image/cmri23yzcdfennvhi5e2.jpg"
-      }
-    }
-  },
-  {
-    "id": 17,
-    "bookingCode": "TRX/2024-02-09/StMXQ",
-    "status": "FAILED",
-    "variant": {
-      "price": "1000000",
-      "variantName": "asdwdwadw"
-    },
-    "ticket": {
-      "dataValues": {
-        "title": "tiket 2",
-        "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507294/image/cmri23yzcdfennvhi5e2.jpg"
-      }
-    }
-  },
-  {
-    "id": 18,
-    "bookingCode": "TRX/2024-02-09/s3fXd",
-    "status": "BOOKED",
-    "variant": {
-      "price": "10000000",
-      "variantName": "varian 1"
-    },
-    "ticket": {
-      "dataValues": {
-        "title": "bikin baru edit 7",
-        "imageUrl": "http://res.cloudinary.com/dwyzuwtel/image/upload/v1707507234/image/coigg6daa57si1smqema.jpg"
       }
     }
   }

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
 const { encryptData, generateRandomString } = require('./utilsHelper');
-const { uploadToCloudinary } = require('../services/cloudinary');
+const cloudinary = require('../services/cloudinary');
 
 const passwordSaltRound = bcrypt.genSaltSync(12);
 const signatureSecretKey = process.env.SIGN_SECRET_KEY || 'pgJApn9pJ8';
@@ -158,7 +158,10 @@ const updateProfile = async (dataObject, imageFile, userId) => {
         if(_.isEmpty(data)) throw Boom.badData('Profile data not found, maybe bad session data!');
 
         let imageResult = null;
-        if (imageFile) imageResult = await uploadToCloudinary(imageFile, 'image');
+        if (imageFile) {
+            imageResult = await cloudinary.uploadToCloudinary(imageFile, 'image');
+            if(!imageResult) throw Boom.internal('Cloudinary image upload failed');
+        }
 
         const checkUpdate = await data.update({ fullname, dob, ...(imageResult && { profileImage: imageResult?.url }) });
         if(_.isEmpty(checkUpdate)) throw Boom.internal('Profile not updated!');

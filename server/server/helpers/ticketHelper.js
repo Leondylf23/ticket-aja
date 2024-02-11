@@ -4,7 +4,7 @@ const { like } = require('sequelize/lib/operators');
 
 const db = require('../../models');
 const GeneralHelper = require('./generalHelper');
-const { uploadToCloudinary } = require('../services/cloudinary');
+const cloudinary = require('../services/cloudinary');
 const { encryptData, generateRandomString } = require('./utilsHelper');
 
 // PRIVATE FUNCTIONS
@@ -18,11 +18,11 @@ const getAllBooking = async (userId, isBusiness) => {
                     association: 'ticket',
                     required: true,
                     attributes: ['title', 'imageUrl'],
-                    where: {...(isBusiness && { isActive: true, })},
+                    where: { ...(isBusiness && { isActive: true, }) },
                 },
             ],
-            where: { 
-                isActive: true, 
+            where: {
+                isActive: true,
                 ...(isBusiness ? { businessUserId: userId } : { createdBy: userId })
             },
             attributes: ['id', 'bookingCode', 'status', 'variant']
@@ -81,7 +81,7 @@ const getBookingDetailWithId = async (dataObject) => {
             ...data?.dataValues,
             ...data?.ticket?.dataValues,
             organization: data?.ticket?.user?.dataValues?.fullname,
-            coupons: data?.couponConnectors?.map(couponData => couponData?.dataValues?.coupon?.dataValues),
+            coupons: data?.couponConnectors?.map(couponData => couponData?.coupon?.dataValues),
             ticket: undefined,
             couponConnectors: undefined
         }
@@ -92,10 +92,8 @@ const getBookingDetailWithId = async (dataObject) => {
     }
 };
 
-const getAllTickets = async (dataObject, userId) => {
+const getAllTickets = async (userId) => {
     try {
-        const { ticketName } = dataObject;
-
         const data = await db.ticket.findAll({
             include: [
                 {
@@ -107,7 +105,6 @@ const getAllTickets = async (dataObject, userId) => {
             ],
             where: {
                 isActive: true,
-                ...(ticketName && { title: { [like]: `%${ticketName}%` } }),
                 ...(userId && { createdBy: userId })
             },
             attributes: ['id', 'imageUrl', 'location', 'title', 'price', 'variants']
@@ -161,7 +158,7 @@ const getTicketDetail = async (dataObject, userId, isBusiness) => {
             ...(!isBusiness && { organization: data?.user?.dataValues?.organization })
         }
 
-        if (isBusiness && data?.dataValues?.createdBy !== userId) throw Boom.badData('Cannot access other user data!');
+        if (isBusiness && data?.dataValues?.createdBy !== userId) throw Boom.badRequest('Cannot access other user data!');
 
         return Promise.resolve(remapData);
     } catch (err) {
@@ -210,7 +207,7 @@ const getAllCouponsByTicketId = async (dataObject, userId) => {
                 id
             },
         });
-        
+
         let couponList = data?.coupons?.map(coupon => ({
             ...coupon?.dataValues,
             priceCut: encryptData(coupon?.dataValues?.priceCut)
@@ -231,7 +228,11 @@ const addTicket = async (dataObject, userId) => {
     try {
         const { title, location, variants, description, imageData } = dataObject;
 
-        const imageResult = await uploadToCloudinary(imageData, 'image');
+        const imageResult = await cloudinary.uploadToCloudinary(imageData, 'image');
+        if (!imageResult) throw Boom.internal('Cloudinary failed to upload image!');
+
+        console.log(imageResult);
+
         let firstVariantPrice = 0;
         try {
             firstVariantPrice = JSON.parse(variants)[0]?.price;
@@ -240,6 +241,8 @@ const addTicket = async (dataObject, userId) => {
         }
 
         const data = await db.ticket.create({ title, price: firstVariantPrice, location, variants, description, imageUrl: imageResult.url, createdBy: userId });
+
+        if (!data) throw Boom.internal('Create ticket failed!');
 
         const remapData = {
             ...data?.dataValues,
@@ -271,23 +274,24 @@ const addBooking = async (dataObject, userId) => {
         const transactionId = `TRX/${dateNow}/${generateRandomString(5)}`;
 
         const result = await db.sequelize.transaction(async () => {
-            const createdBooking = await db.booking.create({ 
-                ticketId, 
-                variant, 
-                paymentMethod, 
-                totalPayment, 
-                createdBy: userId, 
-                businessUserId: checkTicketId?.dataValues?.createdBy, 
-                bookingCode: transactionId 
+            const createdBooking = await db.booking.create({
+                ticketId,
+                variant,
+                paymentMethod,
+                totalPayment,
+                createdBy: userId,
+                businessUserId: checkTicketId?.dataValues?.createdBy,
+                bookingCode: transactionId
             });
-            if(!createdBooking?.id) throw new Error('Booking not created!');
+            if (!createdBooking?.id) throw new Error('Booking not created!');
 
             const bookingId = createdBooking?.id;
+            
             for (let index = 0; index < coupons.length; index++) {
                 const coupon = coupons[index];
 
-                const createdTickets = await db.couponConnector.create({bookingId, couponId: coupon, createdBy: userId, ticketId});
-                if(!createdTickets?.id) throw new Error('Connector not created!');
+                const createdTickets = await db.couponConnector.create({ bookingId, couponId: coupon, createdBy: userId, ticketId });
+                if (!createdTickets?.id) throw new Error('Connector not created!');
             }
 
             return bookingId;
@@ -297,6 +301,7 @@ const addBooking = async (dataObject, userId) => {
             createdId: result,
         });
     } catch (err) {
+        console.log(err)
         return Promise.reject(GeneralHelper.errorResponse(err));
     }
 };
@@ -306,6 +311,8 @@ const addCoupon = async (dataObject, userId) => {
         const { name, priceCut } = dataObject;
 
         const data = await db.coupon.create({ couponName: name, couponPrcCut: priceCut, createdBy: userId });
+
+        if (!data) throw Boom.internal('Create coupon data failed!');
 
         return Promise.resolve({
             createdId: data?.id,
@@ -329,9 +336,17 @@ const editTicketData = async (dataObject, userId) => {
         if (userIdCheck !== userId) throw Boom.unauthorized('Your user account does not allowed to modify other user data!');
 
         let imageResult = null;
-        if (imageData) imageResult = await uploadToCloudinary(imageData, 'image');
+        if (imageData) {
+            imageResult = await cloudinary.uploadToCloudinary(imageData, 'image');
+            if (!imageResult) throw Boom.internal('Cloudinary optional upload failed!');
+        }
 
-        const firstVariantPrice = JSON.parse(variants)[0]?.price;
+        let firstVariantPrice = 0;
+        try {
+            firstVariantPrice = JSON.parse(variants)[0]?.price;
+        } catch (error) {
+            throw Boom.badRequest('Invalid JSON in variant!');
+        }
 
         await data.update({ title, price: firstVariantPrice, location, variants, description, ...(imageResult && { imageUrl: imageResult?.url }) });
 
