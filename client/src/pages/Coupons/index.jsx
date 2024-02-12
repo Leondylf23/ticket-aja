@@ -35,7 +35,7 @@ const Coupons = ({ couponDatas }) => {
     }, []);
 
     return (
-        <div className={classes.mainContainer}>
+        <div className={classes.mainContainer} data-testid='coupons-page'>
             <h1 className={classes.title}><FormattedMessage id='coupons_title' /></h1>
             <div className={classes.topButtonContainer}>
                 <button className={classes.button} onClick={() => setIsOpenCreateCoupon(true)}><FormattedMessage id='coupons_create_new' /></button>

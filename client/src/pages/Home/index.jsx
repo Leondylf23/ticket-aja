@@ -55,7 +55,7 @@ const Home = ({ tickets, userData }) => {
   }, [search]);
 
   return (
-    <div className={clasess.mainContainer}>
+    <div className={clasess.mainContainer} data-testid='home-page'>
       <h1 className={clasess.title}><FormattedMessage id='home_title' /></h1>
       {isBusiness && <div className={clasess.createBtnContainer}>
         <button className={clasess.button} onClick={() => navigate('/ticketcreation')}><FormattedMessage id='home_create_new' /></button>

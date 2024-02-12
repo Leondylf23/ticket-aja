@@ -75,7 +75,7 @@ const Register = ({ isLogin }) => {
     }, [isLogin]);
 
     return (
-        <div className={classes.fullContainer}>
+        <div className={classes.fullContainer} data-testid='register-page'>
             <div className={classes.innerContainer}>
                 <h1 className={classes.title}><FormattedMessage id='register_title' /></h1>
                 <form className={classes.formContainer} onSubmit={sendRegister}>

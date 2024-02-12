@@ -68,7 +68,7 @@ const Login = ({ isLogin }) => {
     }, [isLogin]);
 
     return (
-        <div className={classes.fullContainer}>
+        <div className={classes.fullContainer} data-testid='login-page'>
             {isForgotPassPage ?
                 <div className={classes.innerContainer}>
                     <h1 className={classes.title}><FormattedMessage id='login_title_forgot' /></h1>

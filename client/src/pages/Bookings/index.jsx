@@ -39,7 +39,7 @@ const Bookings = ({ bookingData, userData }) => {
     }, [userData]);
 
     return (
-        <div className={classes.mainContainer}>
+        <div className={classes.mainContainer} data-testid='bookings-page'>
             <h1 className={classes.title}><FormattedMessage id='bookings_title' /></h1>
             {!detailId ?
                 <div className={classes.dataContainer}>
