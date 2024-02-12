@@ -18,5 +18,5 @@ export default {
     '@store': '<rootDir>/src/configureStore',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  collectCoverageFrom: ['src/**/{!(en), (id)}.js']
+  coveragePathIgnorePatterns: ['/src/.*/(saga|constants|actions|reducer)\\.js$']
 };

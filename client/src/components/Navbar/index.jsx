@@ -72,7 +72,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData, isUserLoginedTe
   return (
     <div className={classes.headerWrapper} data-testid="navbar">
       <div className={classes.contentWrapper}>
-        <div className={classes.logoImage} onClick={goHome}>
+        <div className={classes.logoImage} onClick={goHome} data-testid='nav-home-link'>
           <div className={classes.title}>{title}</div>
         </div>
         <div className={classes.toolbar}>
@@ -83,18 +83,18 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData, isUserLoginedTe
               </div>
               <DropDownMenu isOpen={isOpenMenu} anchorEl={anchorEl} onClose={openCloseProfileMenu} labeledMenu={""} isBusiness={isBusiness} />
             </div> : <div className={classes.userButtons}>
-              <button className={classes.login} onClick={() => navigate('/login')}>
+              <button className={classes.login} onClick={() => navigate('/login')} data-testid='nav-login-btn'>
                 <FormattedMessage id="nav_login" />
               </button>
-              <button className={classes.register} onClick={() => navigate('/register')}>
+              <button className={classes.register} onClick={() => navigate('/register')} data-testid='nav-register-btn'>
                 <FormattedMessage id="nav_register" />
               </button>
             </div>
           }
-          <div className={classes.theme} onClick={handleTheme} data-testid="toggleTheme">
+          <div className={classes.theme} onClick={handleTheme} data-testid="nav-toggle-theme-btn">
             {theme === 'light' ? <NightsStayIcon /> : <LightModeIcon />}
           </div>
-          <div className={classes.toggle} onClick={handleClick}>
+          <div className={classes.toggle} onClick={handleClick} data-testid='nav-lang-btn'>
             <Avatar className={classes.avatar} src={locale === 'id' ? '/id.png' : '/en.png'} />
             <div className={classes.lang}>{locale}</div>
             <ExpandMoreIcon />
@@ -102,7 +102,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData, isUserLoginedTe
         </div>
         <Menu open={open} anchorEl={menuPosition} onClose={handleClose}>
           <MenuItem onClick={() => onSelectLang('id')} selected={locale === 'id'}>
-            <div className={classes.menu}>
+            <div className={classes.menu} data-testid='nav-lang-id'>
               <Avatar className={classes.menuAvatar} src="/id.png" />
               <div className={classes.menuLang}>
                 <FormattedMessage id="app_lang_id" />
@@ -110,7 +110,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData, isUserLoginedTe
             </div>
           </MenuItem>
           <MenuItem onClick={() => onSelectLang('en')} selected={locale === 'en'}>
-            <div className={classes.menu}>
+            <div className={classes.menu} data-testid='nav-lang-en'>
               <Avatar className={classes.menuAvatar} src="/en.png" />
               <div className={classes.menuLang}>
                 <FormattedMessage id="app_lang_en" />

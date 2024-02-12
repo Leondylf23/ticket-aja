@@ -3,7 +3,9 @@
 exports[`Navbar Component Should match with snapshot 1`] = `
 {
   "asFragment": [Function],
-  "baseElement": <body>
+  "baseElement": <body
+    style=""
+  >
     <div>
       <div
         class="headerWrapper"
@@ -14,6 +16,7 @@ exports[`Navbar Component Should match with snapshot 1`] = `
         >
           <div
             class="logoImage"
+            data-testid="nav-home-link"
           >
             <div
               class="title"
@@ -29,18 +32,20 @@ exports[`Navbar Component Should match with snapshot 1`] = `
             >
               <button
                 class="login"
+                data-testid="nav-login-btn"
               >
                 Masuk
               </button>
               <button
                 class="register"
+                data-testid="nav-register-btn"
               >
                 Daftar
               </button>
             </div>
             <div
               class="theme"
-              data-testid="toggleTheme"
+              data-testid="nav-toggle-theme-btn"
             >
               <svg
                 aria-hidden="true"
@@ -56,6 +61,7 @@ exports[`Navbar Component Should match with snapshot 1`] = `
             </div>
             <div
               class="toggle"
+              data-testid="nav-lang-btn"
             >
               <div
                 class="MuiAvatar-root MuiAvatar-circular avatar css-1wlk0hk-MuiAvatar-root"
@@ -95,6 +101,7 @@ exports[`Navbar Component Should match with snapshot 1`] = `
       >
         <div
           class="logoImage"
+          data-testid="nav-home-link"
         >
           <div
             class="title"
@@ -110,18 +117,20 @@ exports[`Navbar Component Should match with snapshot 1`] = `
           >
             <button
               class="login"
+              data-testid="nav-login-btn"
             >
               Masuk
             </button>
             <button
               class="register"
+              data-testid="nav-register-btn"
             >
               Daftar
             </button>
           </div>
           <div
             class="theme"
-            data-testid="toggleTheme"
+            data-testid="nav-toggle-theme-btn"
           >
             <svg
               aria-hidden="true"
@@ -137,6 +146,7 @@ exports[`Navbar Component Should match with snapshot 1`] = `
           </div>
           <div
             class="toggle"
+            data-testid="nav-lang-btn"
           >
             <div
               class="MuiAvatar-root MuiAvatar-circular avatar css-1wlk0hk-MuiAvatar-root"
