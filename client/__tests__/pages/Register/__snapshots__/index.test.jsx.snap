@@ -7,7 +7,7 @@ exports[`Register Page Should match with snapshot 1`] = `
     <div>
       <div
         class="fullContainer"
-        data-testid="login-page"
+        data-testid="register-page"
       >
         <div
           class="innerContainer"
@@ -15,11 +15,34 @@ exports[`Register Page Should match with snapshot 1`] = `
           <h1
             class="title"
           >
-            Masuk
+            Daftar
           </h1>
           <form
             class="formContainer"
           >
+            <label
+              class="label"
+              for="fullname"
+            >
+              Nama Lengkap
+            </label>
+            <input
+              class="input"
+              id="fullname"
+              placeholder="Rendy Septio"
+              type="text"
+            />
+            <label
+              class="label"
+              for="dob"
+            >
+              Tanggal Lahir
+            </label>
+            <input
+              class="input"
+              id="dob"
+              type="date"
+            />
             <label
               class="label"
               for="email"
@@ -44,25 +67,43 @@ exports[`Register Page Should match with snapshot 1`] = `
               placeholder="p4sSW0rdR4haS1a"
               type="password"
             />
-            <div
-              class="forgotPasswordContainer"
+            <label
+              class="label"
+              for="role"
             >
-              <a
-                class="text"
+              Role
+            </label>
+            <select
+              class="input"
+              id="role"
+              name="role"
+            >
+              <option
+                value=""
               >
-                Lupa Kata Sandi?
-              </a>
-            </div>
+                Pilih Role
+              </option>
+              <option
+                value="customer"
+              >
+                Pelanggan
+              </option>
+              <option
+                value="business"
+              >
+                Bisnis
+              </option>
+            </select>
             <button
               class="button"
               type="submit"
             >
-              Masuk
+              Daftar
             </button>
             <h3
               class="footer"
             >
-              Belum punya akun? Daftar di 
+              Sudah punya akun? Masuk di 
               <a
                 class="footerLink"
               >
@@ -78,7 +119,7 @@ exports[`Register Page Should match with snapshot 1`] = `
   "container": <div>
     <div
       class="fullContainer"
-      data-testid="login-page"
+      data-testid="register-page"
     >
       <div
         class="innerContainer"
@@ -86,11 +127,34 @@ exports[`Register Page Should match with snapshot 1`] = `
         <h1
           class="title"
         >
-          Masuk
+          Daftar
         </h1>
         <form
           class="formContainer"
         >
+          <label
+            class="label"
+            for="fullname"
+          >
+            Nama Lengkap
+          </label>
+          <input
+            class="input"
+            id="fullname"
+            placeholder="Rendy Septio"
+            type="text"
+          />
+          <label
+            class="label"
+            for="dob"
+          >
+            Tanggal Lahir
+          </label>
+          <input
+            class="input"
+            id="dob"
+            type="date"
+          />
           <label
             class="label"
             for="email"
@@ -115,25 +179,43 @@ exports[`Register Page Should match with snapshot 1`] = `
             placeholder="p4sSW0rdR4haS1a"
             type="password"
           />
-          <div
-            class="forgotPasswordContainer"
+          <label
+            class="label"
+            for="role"
           >
-            <a
-              class="text"
+            Role
+          </label>
+          <select
+            class="input"
+            id="role"
+            name="role"
+          >
+            <option
+              value=""
             >
-              Lupa Kata Sandi?
-            </a>
-          </div>
+              Pilih Role
+            </option>
+            <option
+              value="customer"
+            >
+              Pelanggan
+            </option>
+            <option
+              value="business"
+            >
+              Bisnis
+            </option>
+          </select>
           <button
             class="button"
             type="submit"
           >
-            Masuk
+            Daftar
           </button>
           <h3
             class="footer"
           >
-            Belum punya akun? Daftar di 
+            Sudah punya akun? Masuk di 
             <a
               class="footerLink"
             >

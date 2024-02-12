@@ -2,7 +2,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import RouterDom from 'react-router-dom';
 
-import Register from '@pages/Login';
+import Register from '@pages/Register';
 import store from '@store';
 import Language from '@containers/Language';
 
