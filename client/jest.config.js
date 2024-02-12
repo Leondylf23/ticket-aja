@@ -15,6 +15,8 @@ export default {
     '@static/(.*)': '<rootDir>/src/static/$1',
     '@styles/(.*)': '<rootDir>/src/styles/$1',
     '@utils/(.*)': '<rootDir>/src/utils/$1',
+    '@store': '<rootDir>/src/configureStore',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  collectCoverageFrom: ['src/**/{!(en), (id)}.js']
 };

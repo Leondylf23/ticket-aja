@@ -57,10 +57,13 @@ describe('Ticket Json', () => {
     });
 
     test('Should Return 200: Get All Ticket Public', async () => {
+      query = {
+        ticketName: 'test'
+      }
       getTickets.mockResolvedValue(mockTicket);
 
       const res = await Request(server)
-        .get(apiUrl)
+        .get(`${apiUrl}?${QS.stringify(query)}`)
         .expect(200)
 
       expect(res.body).toBeTruthy();
@@ -72,6 +75,19 @@ describe('Ticket Json', () => {
       const res = await Request(server)
         .get(apiUrl)
         .expect(500)
+
+      expect(res.body).toBeTruthy();
+    });
+
+    test('Should Return 400: Get All Ticket Public With Unknown Params', async () => {
+      query = {
+        ticketNameaa: 'test'
+      }
+      getTickets.mockResolvedValue(mockTicket);
+
+      const res = await Request(server)
+        .get(`${apiUrl}?${QS.stringify(query)}`)
+        .expect(400)
 
       expect(res.body).toBeTruthy();
     });
@@ -610,22 +626,6 @@ describe('Ticket Json', () => {
       };
 
       mockTicket = { dataValues: _.cloneDeep(MockTicketDetail) };
-
-      // jest.mock('../../models', () => ({
-      //   sequelize: {
-      //     transaction: jest.fn()
-      //   },
-      //   ticket: {
-      //     findOne: jest.fn()
-      //   },
-      //   booking: {
-      //     create: jest.fn()
-      //   },
-      //   couponConnector: {
-      //     create: jest.fn()
-      //   }
-      // }));
-
 
       getTickets = jest.spyOn(db.ticket, 'findOne');
       transaction = jest.spyOn(db.sequelize, 'transaction');

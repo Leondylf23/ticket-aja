@@ -14,26 +14,26 @@ const TicketCard = ({ data, isBusiness }) => {
     const navigate = useNavigate();
 
     return (
-        <div className={classes.cardContainer} onClick={() => isBusiness ? navigate(`/ticketcreation/${data?.id}`) : navigate(`/ticket/${data?.id}`)}>
-            <img className={classes.cardImage} src={data?.imageUrl} alt="Img Failed!" />
+        <div className={classes.cardContainer} onClick={() => isBusiness ? navigate(`/ticketcreation/${data?.id}`) : navigate(`/ticket/${data?.id}`)} data-testid='ticket-card'>
+            <img className={classes.cardImage} src={data?.imageUrl} alt="Img Failed!" data-testid='ticket-card-img' />
             <div className={classes.cardContent}>
-                <p className={classes.title}>{data?.title}</p>
+                <p className={classes.title} data-testid='ticket-card-title'>{data?.title}</p>
                 <div className={classes.infoContainer}>
                     <div className={classes.infoIconContainer}>
                         <FmdGoodIcon className={classes.icon} />
-                        <p className={classes.text}>{data?.location}</p>
+                        <p className={classes.text} data-testid='ticket-card-location'>{data?.location}</p>
                     </div>
                     <div className={classes.infoIconContainer}>
                         <AssignmentIndIcon className={classes.icon} />
-                        <p className={classes.text}>{data?.organization}</p>
+                        <p className={classes.text} data-testid='ticket-card-org'>{data?.organization}</p>
                     </div>
                     <div className={classes.infoIconContainer}>
                         <ViewWeekIcon className={classes.icon} />
-                        <p className={classes.text}>{data?.variants?.join(', ')}</p>
+                        <p className={classes.text} data-testid='ticket-card-variant'>{data?.variants?.join(', ')}</p>
                     </div>
                     <div className={classes.priceContainer}>
                         <LocalOfferIcon className={classes.icon} />
-                        <p className={classes.text}>Rp. {numberWithPeriods(data?.price)}</p>
+                        <p className={classes.text} data-testid='ticket-card-price'>Rp. {numberWithPeriods(data?.price)}</p>
                     </div>
                     <p className={classes.footer}>/<FormattedMessage id='ticket_card_price' /></p>
                 </div>

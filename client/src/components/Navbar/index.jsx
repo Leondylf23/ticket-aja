@@ -14,11 +14,11 @@ import { createStructuredSelector } from 'reselect';
 import { setLocale, setTheme } from '@containers/App/actions';
 import { selectLogin, selectUserData } from '@containers/Client/selectors';
 import DropDownMenu from './components/DropdownMenu';
-
-import classes from './style.module.scss';
 import { getUserDataDecrypt } from '@utils/allUtils';
 
-const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
+import classes from './style.module.scss';
+
+const Navbar = ({ title, locale, theme, isUserLogined, userData, isUserLoginedTest}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
   const isOpenMenu = Boolean(anchorEl);
 
   const openCloseProfileMenu = (e) => {
-    if(isOpenMenu) {
+    if (isOpenMenu) {
       setAnchorEl(null);
     } else {
       setAnchorEl(e.currentTarget);
@@ -62,7 +62,7 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
   };
 
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       const user = getUserDataDecrypt(userData);
       setProfileImg(user?.profileImage);
       setIsBusiness(user?.role === 'business');
@@ -76,9 +76,11 @@ const Navbar = ({ title, locale, theme, isUserLogined, userData }) => {
           <div className={classes.title}>{title}</div>
         </div>
         <div className={classes.toolbar}>
-          {isUserLogined ?
-            <div className={classes.profile}>
-              <Avatar className={classes.avatar} src={profileImg} onClick={openCloseProfileMenu} />
+          {isUserLogined | isUserLoginedTest ?
+            <div className={classes.profile}  data-testid='nav-profile-btn'>
+              <div onClick={openCloseProfileMenu} >
+                <Avatar className={classes.avatar} src={profileImg} />
+              </div>
               <DropDownMenu isOpen={isOpenMenu} anchorEl={anchorEl} onClose={openCloseProfileMenu} labeledMenu={""} isBusiness={isBusiness} />
             </div> : <div className={classes.userButtons}>
               <button className={classes.login} onClick={() => navigate('/login')}>

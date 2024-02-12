@@ -92,7 +92,9 @@ const getBookingDetailWithId = async (dataObject) => {
     }
 };
 
-const getAllTickets = async (userId) => {
+const getAllTickets = async (dataObject, userId) => {
+    const { ticketName } = dataObject;
+
     try {
         const data = await db.ticket.findAll({
             include: [
@@ -105,7 +107,8 @@ const getAllTickets = async (userId) => {
             ],
             where: {
                 isActive: true,
-                ...(userId && { createdBy: userId })
+                ...(userId && { createdBy: userId }),
+                ...(ticketName && { title: { [like]: `%${ticketName}%` } })
             },
             attributes: ['id', 'imageUrl', 'location', 'title', 'price', 'variants']
         });
@@ -286,7 +289,7 @@ const addBooking = async (dataObject, userId) => {
             if (!createdBooking?.id) throw new Error('Booking not created!');
 
             const bookingId = createdBooking?.id;
-            
+
             for (let index = 0; index < coupons.length; index++) {
                 const coupon = coupons[index];
 

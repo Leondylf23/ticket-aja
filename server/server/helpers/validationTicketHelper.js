@@ -1,6 +1,16 @@
 const Joi = require('joi');
 const Boom = require('boom');
 
+const allTicketQueryValidation = (data) => {
+  const schema = Joi.object({
+    ticketName: Joi.string().optional().description('Title ticket search'),
+  });
+
+  if (schema.validate(data).error) {
+    throw Boom.badRequest(schema.validate(data).error);
+  }
+};
+
 const ticketFormValidation = (data) => {
   const schema = Joi.object({
     title: Joi.string().min(5).max(255).required().description('Title ticket'),
@@ -88,6 +98,8 @@ const idValidation = (data) => {
 };
 
 module.exports = {
+  allTicketQueryValidation,
+  
   ticketFormValidation,
   bookingRequestValidation,
   bookingDataFormValidation,

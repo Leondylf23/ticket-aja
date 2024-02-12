@@ -127,7 +127,8 @@ const allCouponsByTicketId = async (request, reply) => {
 
 const allTickets = async (request, reply) => {
     try {
-        const response = await TicketHelper.getAllTickets();
+        ValidationTicket.allTicketQueryValidation(request.query);
+        const response = await TicketHelper.getAllTickets(request.query);
 
         return reply.send({
             message: 'success',

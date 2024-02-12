@@ -9,7 +9,9 @@ import classes from './style.module.scss';
 const PopupWindow = ({ open, children, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ className: classes.dialogWrapper }}>
-      {children}
+      <div data-testid='popup-window'>
+        {children}
+      </div>
     </Dialog>
   );
 };

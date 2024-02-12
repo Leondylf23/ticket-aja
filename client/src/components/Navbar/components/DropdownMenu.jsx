@@ -33,7 +33,6 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu, isBusiness }) {
                 onClose();
                 break;
             case 3:
-                // navigate("/newjourney");
                 dispatch(setLogin(false));
                 dispatch(setUserData(null));
                 dispatch(setToken(null));
@@ -43,33 +42,35 @@ function DropDownMenu({ isOpen, anchorEl, onClose, labeledMenu, isBusiness }) {
     }
 
     return (
-        <Menu
-            id="profile-menu"
-            anchorEl={anchorEl}
-            open={isOpen}
-            onClose={onClose}
-            MenuListProps={{
-                'aria-labelledby': labeledMenu,
-            }}
-        >
-            <MenuItem onClick={() => menuItemAction(0)}>
-                <Person2OutlinedIcon className={classes.iconProfile} />
-                <Typography variant="body2"><FormattedMessage id="nav_profile" /></Typography>
-            </MenuItem>
-            <MenuItem onClick={() => menuItemAction(1)}>
-                <BallotIcon className={classes.iconBookings} />
-                <Typography variant="body2"><FormattedMessage id="nav_bookings" /></Typography>
-            </MenuItem>
-            {isBusiness && <MenuItem onClick={() => menuItemAction(2)}>
-                <DiscountIcon className={classes.iconDiscount} />
-                <Typography variant="body2"><FormattedMessage id="nav_coupons" /></Typography>
-            </MenuItem>}
-            <div className={classes.divider}></div>
-            <MenuItem onClick={() => menuItemAction(3)}>
-                <LogoutIcon className={classes.iconLogout} />
-                <Typography variant="body2"><FormattedMessage id="nav_logout" /></Typography>
-            </MenuItem>
-        </Menu>
+        <div data-testid='nav-dropdown'>
+            <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={isOpen}
+                onClose={onClose}
+                MenuListProps={{
+                    'aria-labelledby': labeledMenu,
+                }}
+            >
+                <MenuItem onClick={() => menuItemAction(0)}>
+                    <Person2OutlinedIcon className={classes.iconProfile} />
+                    <Typography variant="body2"><FormattedMessage id="nav_profile" /></Typography>
+                </MenuItem>
+                <MenuItem onClick={() => menuItemAction(1)}>
+                    <BallotIcon className={classes.iconBookings} />
+                    <Typography variant="body2"><FormattedMessage id="nav_bookings" /></Typography>
+                </MenuItem>
+                {isBusiness && <MenuItem onClick={() => menuItemAction(2)}>
+                    <DiscountIcon className={classes.iconDiscount} />
+                    <Typography variant="body2"><FormattedMessage id="nav_coupons" /></Typography>
+                </MenuItem>}
+                <div className={classes.divider}></div>
+                <MenuItem onClick={() => menuItemAction(3)}>
+                    <LogoutIcon className={classes.iconLogout} />
+                    <Typography variant="body2"><FormattedMessage id="nav_logout" /></Typography>
+                </MenuItem>
+            </Menu>
+        </div>
     );
 }
 

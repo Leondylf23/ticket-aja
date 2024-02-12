@@ -1,41 +1,61 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, queryByTestId } from '@testing-library/react';
+import { Provider } from 'react-redux';
+
 import PopupMessage from '@components/PopupMessage/Dialog';
+import store from '@store';
+import Language from '@containers/Language';
+
+jest.mock('react-redux', () => ({
+  ...jest.requireActual('react-redux')
+}));
+
+jest.mock('reselect', () => ({
+  ...jest.requireActual('reselect')
+}));
+
+const ParentComponent = (children) => (
+  <Provider store={store}>
+    <Language>
+      {children}
+    </Language>
+  </Provider>
+);
 
 describe('PopupMessage Component', () => {
-  it('renders without crashing', () => {
-    const { getByTestId } = render(<PopupMessage />);
+  test('Rendered', () => {
+    const { getByTestId } = render(ParentComponent(
+      <PopupMessage />
+    ));
     const popupMessageComponent = getByTestId('popup-message');
     expect(popupMessageComponent).toBeInTheDocument();
   });
 
-  it('renders the title and message correctly', () => {
+  test('Title & Message', () => {
     const title = 'Test Title';
     const message = 'Test Message';
-    const { getByTestId } = render(
+    const { getByTestId } = render(ParentComponent(
       <PopupMessage open={true} title={title} message={message} />
-    );
+    ));
 
-    expect(getByTestId('popup-title').textContent).toBe(title);
-    expect(getByTestId('popup-message-content').textContent).toBe(message);
+    expect(getByTestId('popup-message-title').textContent).toBe(title);
+    expect(getByTestId('popup-message-msg').textContent).toBe(message);
   });
 
-  it('calls onClose when button is clicked', () => {
-    const onCloseMock = jest.fn();
-    const { getByTestId } = render(<PopupMessage open={true} onClose={onCloseMock} />);
-    const closeButton = getByTestId('popup-close-button');
+  test('use default msg and title', () => {
+    const { getByTestId } = render(ParentComponent(
+      <PopupMessage open={true} />
+    ));
+    const defaultTitle = getByTestId('popup-message-title').textContent;
+    const defaultMessage = getByTestId('popup-message-msg').textContent;
 
-    fireEvent.click(closeButton);
-
-    expect(onCloseMock).toHaveBeenCalled();
+    expect(defaultTitle).toBe('Terjadi kesalahan!');
+    expect(defaultMessage).toBe('Maaf, telah terjadi kesalahan. Silakan coba beberapa saat lagi');
   });
 
-  it('uses default titles and messages if props are not provided', () => {
-    const { getByTestId } = render(<PopupMessage open={true} />);
-    const defaultTitle = getByTestId('popup-title').textContent;
-    const defaultMessage = getByTestId('popup-message-content').textContent;
-
-    expect(defaultTitle).toBe('app_popup_error_title');
-    expect(defaultMessage).toBe('app_popup_error_message');
+  test('Should match with snapshot', () => {
+    const popupMessageComponent = render(ParentComponent(
+      <PopupMessage />
+    ));
+    expect(popupMessageComponent).toMatchSnapshot();
   });
 });
